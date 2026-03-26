@@ -1,1 +1,21 @@
-{\n  "name": "sagara",\n  "version": "1.0.0",\n  "description": "A accounting application",\n  "main": "index.js",\n  "scripts": {\n    "test": "echo 'Error: no test specified' && exit 1"\n  },\n  "author": "khoirunnajah17",\n  "license": "ISC",\n  "dependencies": {\n    "express": "^4.17.1",\n    "mongoose": "^5.10.9",\n    "dotenv": "^8.2.0"\n  }\n}
+{
+  "name": "sagara",
+  "version": "1.0.0",
+  "description": "Aplikasi Akuntansi seperti Accurate Pro",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "author": "khoirunnajah17",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0",
+    "express-session": "^1.17.3",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5"
+  }
+}

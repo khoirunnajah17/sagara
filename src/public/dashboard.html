@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard – Sagara Accounting</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo"><h2>💼 Sagara Accounting</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html" class="active"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Persediaan</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+    </nav>
+  </aside>
+  <!-- Main -->
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Dashboard</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="page-header"><h1>Ringkasan Keuangan</h1></div>
+      <!-- Stat cards -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-icon blue">💰</div><div class="stat-body"><div class="label">Total Aset</div><div class="value" id="statAsset">–</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">📈</div><div class="stat-body"><div class="label">Total Pendapatan</div><div class="value" id="statRevenue">–</div></div></div>
+        <div class="stat-card"><div class="stat-icon orange">📦</div><div class="stat-body"><div class="label">Total Pembelian</div><div class="value" id="statPurchase">–</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">⚠️</div><div class="stat-body"><div class="label">Stok Kritis</div><div class="value" id="statLow">–</div></div></div>
+      </div>
+      <!-- Sales channel breakdown -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Penjualan per Channel</span></div>
+          <div id="channelStats">Memuat...</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Transaksi Terbaru</span></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Invoice</th><th>Pelanggan</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody id="recentSales"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="/js/main.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

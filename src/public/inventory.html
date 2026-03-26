@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Persediaan – Sagara Accounting</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><h2>💼 Sagara Accounting</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html" class="active"><span class="nav-icon">🏪</span> <span>Persediaan</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+    </nav>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Persediaan</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Manajemen Persediaan</h1>
+        <button class="btn btn-primary" id="btnAdd">+ Tambah Produk</button>
+      </div>
+      <div class="card">
+        <div class="filters">
+          <input class="filter-input" id="filterSearch" placeholder="Cari kode / nama produk...">
+          <input class="filter-input" id="filterCategory" placeholder="Kategori...">
+          <button class="btn btn-outline btn-sm" id="btnSearch">🔍 Cari</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Kode</th><th>Nama Produk</th><th>Kategori</th><th>Satuan</th>
+                <th class="text-right">Stok</th><th class="text-right">H. Beli</th>
+                <th class="text-right">H. Jual</th><th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Tambah Produk</span>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="productId">
+      <div class="form-row">
+        <div class="form-group"><label>Kode Produk *</label><input class="form-control" id="fCode" placeholder="PRD-001"></div>
+        <div class="form-group"><label>Satuan</label><input class="form-control" id="fUnit" placeholder="pcs, kg, dll" value="pcs"></div>
+      </div>
+      <div class="form-group"><label>Nama Produk *</label><input class="form-control" id="fName" placeholder="Nama produk"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Kategori</label><input class="form-control" id="fCategory" placeholder="Kategori"></div>
+        <div class="form-group"><label>Stok Awal</label><input class="form-control" id="fStock" type="number" min="0" value="0"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Harga Beli</label><input class="form-control" id="fCost" type="number" min="0" value="0"></div>
+        <div class="form-group"><label>Harga Jual</label><input class="form-control" id="fSell" type="number" min="0" value="0"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="modalCancel">Batal</button>
+      <button class="btn btn-primary" id="modalSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Stock Adjust Modal -->
+<div class="modal-overlay" id="stockModal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header">
+      <span class="modal-title">Sesuaikan Stok</span>
+      <button class="modal-close" id="stockClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:#757575;margin-bottom:12px">Produk: <strong id="stockProductName"></strong></p>
+      <div class="form-group">
+        <label>Penyesuaian (+ tambah / - kurangi)</label>
+        <input class="form-control" id="fAdjust" type="number" placeholder="Cth: 10 atau -5">
+      </div>
+      <input type="hidden" id="stockProductId">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="stockCancel">Batal</button>
+      <button class="btn btn-warning" id="stockSave">Terapkan</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/inventory.js"></script>
+</body>
+</html>

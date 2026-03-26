@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pembelian – Sagara Accounting</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><h2>💼 Sagara Accounting</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/purchases.html" class="active"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Persediaan</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+    </nav>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Pembelian</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Manajemen Pembelian</h1>
+        <button class="btn btn-primary" id="btnAdd">+ Tambah PO</button>
+      </div>
+      <div class="card">
+        <div class="filters">
+          <select class="filter-select" id="filterStatus">
+            <option value="">Semua Status</option>
+            <option value="DRAFT">Draft</option>
+            <option value="ORDERED">Dipesan</option>
+            <option value="RECEIVED">Diterima</option>
+            <option value="CANCELLED">Dibatalkan</option>
+          </select>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>No. PO</th><th>Tanggal</th><th>Supplier</th><th class="text-right">Total</th><th>Status</th><th class="text-center">Aksi</th></tr></thead>
+            <tbody id="purchasesTable"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Add PO Modal -->
+<div class="modal-overlay" id="poModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title">Tambah Purchase Order</span>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>No. PO *</label><input class="form-control" id="fPO" placeholder="PO-2024-001"></div>
+        <div class="form-group"><label>Tanggal *</label><input class="form-control" id="fDate" type="date"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Nama Supplier *</label><input class="form-control" id="fSupplier" placeholder="Nama supplier"></div>
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-control" id="fStatus">
+            <option value="DRAFT">Draft</option><option value="ORDERED">Dipesan</option><option value="RECEIVED">Diterima</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px">
+        <strong style="font-size:13px">Item Produk</strong>
+        <button class="btn btn-outline btn-sm" type="button" id="btnAddItem">+ Tambah Item</button>
+      </div>
+      <table class="items-table">
+        <thead><tr><th>Produk</th><th>Qty</th><th>Harga Satuan</th><th>Subtotal</th><th></th></tr></thead>
+        <tbody id="itemRows"></tbody>
+      </table>
+      <div style="text-align:right;font-size:15px;font-weight:700;margin-top:10px">
+        Total: <span id="grandTotal">Rp 0</span>
+      </div>
+      <div class="form-group" style="margin-top:10px"><label>Catatan</label><input class="form-control" id="fNotes" placeholder="Opsional"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="modalCancel">Batal</button>
+      <button class="btn btn-primary" id="modalSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title">Detail Pembelian</span>
+      <button class="modal-close" id="detailClose">&times;</button>
+    </div>
+    <div class="modal-body" id="detailContent"></div>
+  </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/purchases.js"></script>
+</body>
+</html>

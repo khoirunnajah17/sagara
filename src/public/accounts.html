@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bagan Akun – Sagara Accounting</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><h2>💼 Sagara Accounting</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html" class="active"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Persediaan</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+    </nav>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Bagan Akun</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Bagan Akun (Chart of Accounts)</h1>
+        <button class="btn btn-primary" id="btnAdd">+ Tambah Akun</button>
+      </div>
+      <div class="card">
+        <div class="filters">
+          <select class="filter-select" id="filterType">
+            <option value="">Semua Tipe</option>
+            <option value="ASSET">Aset</option>
+            <option value="LIABILITY">Kewajiban</option>
+            <option value="EQUITY">Ekuitas</option>
+            <option value="REVENUE">Pendapatan</option>
+            <option value="EXPENSE">Beban</option>
+          </select>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Kode</th><th>Nama Akun</th><th>Tipe</th><th class="text-right">Saldo</th><th class="text-center">Aksi</th></tr></thead>
+            <tbody id="accountsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="accountModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Tambah Akun</span>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="accountId">
+      <div class="form-row">
+        <div class="form-group"><label>Kode Akun *</label><input class="form-control" id="fCode" placeholder="Cth: 1-1001"></div>
+        <div class="form-group">
+          <label>Tipe *</label>
+          <select class="form-control" id="fType">
+            <option value="ASSET">Aset</option><option value="LIABILITY">Kewajiban</option>
+            <option value="EQUITY">Ekuitas</option><option value="REVENUE">Pendapatan</option>
+            <option value="EXPENSE">Beban</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Nama Akun *</label><input class="form-control" id="fName" placeholder="Nama akun"></div>
+      <div class="form-group"><label>Saldo Awal</label><input class="form-control" id="fBalance" type="number" min="0" value="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="modalCancel">Batal</button>
+      <button class="btn btn-primary" id="modalSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/accounts.js"></script>
+</body>
+</html>
