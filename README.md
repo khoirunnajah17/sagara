@@ -58,16 +58,66 @@ npm start
 
 ---
 
-## Auto Deploy ke Railway
+## Auto Deploy ke Jagoan Hosting (VPS)
 
-### Persiapan (sekali saja)
+### Prasyarat di Server Jagoan Hosting
 
-1. Buat akun gratis di [railway.app](https://railway.app)
-2. Buat project baru → tambah service **Node.js** + **MySQL**
-3. Di Railway → Settings → pastikan branch deploy = `main`
-4. Di Railway → Settings → Generate **Service Token**
-5. Di GitHub repo → Settings → Secrets → Actions → tambah secret:
-   - `RAILWAY_TOKEN` = token dari Railway
+Lakukan ini **sekali** via SSH ke VPS kamu:
+
+```bash
+# 1. Install Node.js 20
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 2. Install PM2 secara global
+sudo npm install -g pm2
+
+# 3. Clone repo ke server
+cd /var/www
+git clone https://github.com/khoirunnajah17/sagara.git
+cd sagara
+
+# 4. Buat file .env
+cp .env.example .env
+nano .env   # isi sesuai konfigurasi MySQL di server
+
+# 5. Buat database & import schema
+mysql -u root -p -e "CREATE DATABASE sagara_db CHARACTER SET utf8mb4;"
+mysql -u root -p sagara_db < database.sql
+
+# 6. Install dependencies & jalankan pertama kali
+npm ci --omit=dev
+mkdir -p logs
+pm2 start ecosystem.config.js --env production
+pm2 save
+pm2 startup   # ikuti instruksi yang muncul agar PM2 auto-start saat reboot
+```
+
+### Setup GitHub Secrets (sekali saja)
+
+Di GitHub repo → **Settings → Secrets → Actions**, tambahkan secret berikut:
+
+| Secret | Isi |
+|---|---|
+| `JAGOAN_HOST` | IP atau hostname VPS (contoh: `103.x.x.x`) |
+| `JAGOAN_USER` | Username SSH (biasanya `root` atau `ubuntu`) |
+| `JAGOAN_SSH_KEY` | Isi file private key SSH (contoh: `~/.ssh/id_rsa`) |
+| `JAGOAN_SSH_PORT` | Port SSH — isi `22` (atau port custom jika diubah) |
+| `JAGOAN_APP_DIR` | Path folder aplikasi di server (contoh: `/var/www/sagara`) |
+
+#### Cara buat SSH key (jika belum punya):
+
+```bash
+# Di komputer lokal
+ssh-keygen -t ed25519 -C "github-actions-sagara"
+# Hasilkan ~/.ssh/id_ed25519 (private) dan ~/.ssh/id_ed25519.pub (public)
+
+# Copy public key ke server
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@IP_VPS
+
+# Copy isi private key ke GitHub Secret JAGOAN_SSH_KEY
+cat ~/.ssh/id_ed25519
+```
 
 ### Cara Kerja Auto Deploy
 
@@ -78,29 +128,17 @@ Push ke branch main
 GitHub Actions CI (.github/workflows/ci.yml)
    ├── Install dependencies
    ├── Import DB schema
-   ├── Smoke test server
+   ├── Smoke test server (HTTP 200)
    └── Login API test
         │
         ▼ (jika semua lulus)
 GitHub Actions Deploy (.github/workflows/deploy.yml)
-   └── railway up → deploy ke Railway
+   ├── SSH ke VPS Jagoan Hosting
+   ├── git pull origin main
+   ├── npm ci --omit=dev
+   ├── pm2 reload (zero-downtime restart)
+   └── pm2 save
 ```
-
-### Environment Variables di Railway
-
-Set variabel-variabel ini di Railway Dashboard → Variables:
-
-| Variable | Nilai |
-|---|---|
-| `PORT` | `3000` |
-| `DB_HOST` | (dari Railway MySQL — otomatis via `${{MYSQL_HOST}}`) |
-| `DB_PORT` | `3306` |
-| `DB_USER` | (dari Railway MySQL) |
-| `DB_PASSWORD` | (dari Railway MySQL) |
-| `DB_NAME` | `sagara_db` |
-| `SESSION_SECRET` | string acak panjang |
-
-> Railway menyediakan variable reference `${{MySQL.MYSQL_HOST}}` yang bisa dipakai langsung.
 
 ---
 
@@ -110,17 +148,17 @@ Set variabel-variabel ini di Railway Dashboard → Variables:
 sagara/
 ├── .github/
 │   └── workflows/
-│       ├── ci.yml        # CI — test setiap push
-│       └── deploy.yml    # Deploy otomatis ke Railway (push ke main)
+│       ├── ci.yml            # CI — test setiap push
+│       └── deploy.yml        # Auto deploy via SSH ke Jagoan Hosting VPS
 ├── src/
-│   ├── config/db.js      # MySQL2 connection pool
+│   ├── config/db.js          # MySQL2 connection pool
 │   ├── middleware/auth.js
-│   ├── routes/           # auth, accounts, journal, sales, purchases, inventory, reports
-│   └── public/           # HTML/CSS/JS frontend
-├── database.sql           # Schema + seed data
-├── index.js               # Entry point
+│   ├── routes/               # auth, accounts, journal, sales, purchases, inventory, reports
+│   └── public/               # HTML/CSS/JS frontend
+├── database.sql               # Schema + seed data
+├── index.js                   # Entry point
+├── ecosystem.config.js        # Konfigurasi PM2
 ├── Dockerfile
 ├── docker-compose.yml
-├── railway.toml
 └── .env.example
 ```
