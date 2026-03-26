@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS purchase_items (
 
 -- Default admin user: admin / Admin@1234
 INSERT INTO users (username, email, password, role) VALUES
-('admin', 'admin@sagara.id', '$2a$10$YmHq0N7BdB7a3U7TRc/fLOa6P4b56U/kLfImTNxmv3K1RfLX5Hd9S', 'admin');
+('admin', 'admin@sagara.id', '$2a$10$aEchA07QT1/pwaANT0kNiugTQ3xmITLRysdRV6xcsOjOdwrvS8gcy', 'admin');
 
 -- Sample Chart of Accounts
 INSERT INTO accounts (code, name, type, balance) VALUES

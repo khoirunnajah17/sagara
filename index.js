@@ -33,7 +33,7 @@ app.use('/api/reports',   require('./src/routes/reports'));
 // Root redirect
 app.get('/', (req, res) => res.redirect('/index.html'));
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Sagara Accounting berjalan di http://localhost:${PORT}`);
 });
 
