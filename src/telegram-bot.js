@@ -67,11 +67,12 @@ function startBot(token) {
                 text += `${icon} \`${p.code}\` *${p.name}*\n`;
                 text += `   ${formatRupiah(p.sell_price)}/${p.unit || 'pcs'} — Stok: ${stok}\n`;
 
+                const row = [];
                 if (stok > 0) {
-                    buttons.push([
-                        { text: `➕ ${p.name}`, callback_data: `add_${p.code}` }
-                    ]);
+                    row.push({ text: `➕ ${p.name}`, callback_data: `add_${p.code}` });
                 }
+                row.push({ text: `✏️ Harga`, callback_data: `editPrice_${p.code}` });
+                buttons.push(row);
             });
 
             await bot.sendMessage(chatId, text, {
@@ -704,6 +705,31 @@ function startBot(token) {
             return;
         }
 
+        // ── Edit sell price ─────────────────────────────────
+        if (data.startsWith('editPrice_')) {
+            const code = data.replace('editPrice_', '');
+            try {
+                const [[p]] = await pool.query(
+                    'SELECT code, name, sell_price, unit FROM products WHERE code = ?', [code]
+                );
+                if (!p) return bot.sendMessage(chatId, '❌ Produk tidak ditemukan.', mainMenu);
+                userState[chatId] = { waiting: 'editPriceInput', code: p.code };
+                bot.sendMessage(chatId,
+                    `✏️ *Ubah Harga Jual*\n\n` +
+                    `📦 *${p.name}* (\`${p.code}\`)\n` +
+                    `💰 Harga saat ini: *${formatRupiah(p.sell_price)}*/${p.unit || 'pcs'}\n\n` +
+                    `Ketik harga baru (angka saja):`,
+                    {
+                        parse_mode: 'Markdown',
+                        reply_markup: { force_reply: true, selective: true }
+                    }
+                );
+            } catch (e) {
+                bot.sendMessage(chatId, '❌ Gagal: ' + e.message);
+            }
+            return;
+        }
+
         // ── Confirm payment (tunai) ─────────────────────────
         if (data === 'confirmPay') {
             await executePayment(chatId);
@@ -818,6 +844,37 @@ function startBot(token) {
             const code = userState[chatId].code;
             delete userState[chatId];
             await addToCart(chatId, code, qty);
+            return;
+        }
+
+        // ── Handle edit price input ─────────────────────────
+        if (userState[chatId]?.waiting === 'editPriceInput') {
+            const newPrice = parseFloat(text.replace(/[^0-9.]/g, ''));
+            if (isNaN(newPrice) || newPrice <= 0) {
+                bot.sendMessage(chatId, '⚠️ Masukkan harga yang valid (angka, contoh: 50000)');
+                return;
+            }
+            const code = userState[chatId].code;
+            delete userState[chatId];
+            try {
+                const [[product]] = await pool.query(
+                    'SELECT name, sell_price FROM products WHERE code = ?', [code]
+                );
+                if (!product) return bot.sendMessage(chatId, '❌ Produk tidak ditemukan.', mainMenu);
+
+                const oldPrice = parseFloat(product.sell_price);
+                await pool.query('UPDATE products SET sell_price = ? WHERE code = ?', [newPrice, code]);
+
+                bot.sendMessage(chatId,
+                    `✅ *Harga berhasil diubah!*\n\n` +
+                    `📦 *${product.name}* (\`${code}\`)\n` +
+                    `💰 Harga lama: ${formatRupiah(oldPrice)}\n` +
+                    `💰 Harga baru: *${formatRupiah(newPrice)}*`,
+                    mainMenu
+                );
+            } catch (e) {
+                bot.sendMessage(chatId, '❌ Gagal mengubah harga: ' + e.message, mainMenu);
+            }
             return;
         }
 
