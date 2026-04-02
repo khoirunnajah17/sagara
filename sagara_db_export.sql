@@ -40,7 +40,7 @@ CREATE TABLE `accounts` (
 
 LOCK TABLES `accounts` WRITE;
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
-INSERT INTO `accounts` VALUES (1,'1-0000','Aset','ASSET',0.00,'2026-03-26 09:34:16'),(2,'1-1000','Kas & Bank','ASSET',50000000.00,'2026-03-26 09:34:16'),(3,'1-1001','Kas Tunai','ASSET',10000000.00,'2026-03-26 09:34:16'),(4,'1-1002','Bank BCA','ASSET',40000000.00,'2026-03-26 09:34:16'),(5,'1-2000','Piutang Usaha','ASSET',5000000.00,'2026-03-26 09:34:16'),(6,'1-3000','Persediaan Barang','ASSET',20000000.00,'2026-03-26 09:34:16'),(7,'1-4000','Peralatan','ASSET',15000000.00,'2026-03-26 09:34:16'),(8,'2-0000','Kewajiban','LIABILITY',0.00,'2026-03-26 09:34:16'),(9,'2-1000','Hutang Usaha','LIABILITY',8000000.00,'2026-03-26 09:34:16'),(10,'2-2000','Hutang Pajak','LIABILITY',1000000.00,'2026-03-26 09:34:16'),(11,'3-0000','Ekuitas','EQUITY',0.00,'2026-03-26 09:34:16'),(12,'3-1000','Modal Pemilik','EQUITY',80000000.00,'2026-03-26 09:34:16'),(13,'3-2000','Laba Ditahan','EQUITY',1000000.00,'2026-03-26 09:34:16'),(14,'4-0000','Pendapatan','REVENUE',0.00,'2026-03-26 09:34:16'),(15,'4-1000','Pendapatan Penjualan','REVENUE',0.00,'2026-03-26 09:34:16'),(16,'4-2000','Pendapatan Lain-lain','REVENUE',0.00,'2026-03-26 09:34:16'),(17,'5-0000','Beban','EXPENSE',0.00,'2026-03-26 09:34:16'),(18,'5-1000','Harga Pokok Penjualan','EXPENSE',0.00,'2026-03-26 09:34:16'),(19,'5-2000','Beban Operasional','EXPENSE',0.00,'2026-03-26 09:34:16'),(20,'5-2001','Beban Gaji','EXPENSE',0.00,'2026-03-26 09:34:16'),(21,'5-2002','Beban Sewa','EXPENSE',0.00,'2026-03-26 09:34:16'),(22,'5-2003','Beban Listrik & Air','EXPENSE',0.00,'2026-03-26 09:34:16'),(23,'5-3000','Beban Ongkos Kirim','EXPENSE',0.00,'2026-03-26 09:34:16');
+INSERT INTO `accounts` VALUES (1,'1-0000','Aset','ASSET',0.00,'2026-03-26 09:34:16'),(2,'1-1000','Kas & Bank','ASSET',50000000.00,'2026-03-26 09:34:16'),(3,'1-1001','Kas Tunai','ASSET',41625000.00,'2026-03-26 09:34:16'),(4,'1-1002','Bank BCA','ASSET',40000000.00,'2026-03-26 09:34:16'),(5,'1-2000','Piutang Usaha','ASSET',5000000.00,'2026-03-26 09:34:16'),(6,'1-3000','Persediaan Barang','ASSET',20250000.00,'2026-03-26 09:34:16'),(7,'1-4000','Peralatan','ASSET',15000000.00,'2026-03-26 09:34:16'),(8,'2-0000','Kewajiban','LIABILITY',0.00,'2026-03-26 09:34:16'),(9,'2-1000','Hutang Usaha','LIABILITY',8000000.00,'2026-03-26 09:34:16'),(10,'2-2000','Hutang Pajak','LIABILITY',1000000.00,'2026-03-26 09:34:16'),(11,'3-0000','Ekuitas','EQUITY',0.00,'2026-03-26 09:34:16'),(12,'3-1000','Modal Pemilik','EQUITY',80000000.00,'2026-03-26 09:34:16'),(13,'3-2000','Laba Ditahan','EQUITY',1000000.00,'2026-03-26 09:34:16'),(14,'4-0000','Pendapatan','REVENUE',0.00,'2026-03-26 09:34:16'),(15,'4-1000','Pendapatan Penjualan','REVENUE',-30875000.00,'2026-03-26 09:34:16'),(16,'4-2000','Pendapatan Lain-lain','REVENUE',-1000000.00,'2026-03-26 09:34:16'),(17,'5-0000','Beban','EXPENSE',0.00,'2026-03-26 09:34:16'),(18,'5-1000','Harga Pokok Penjualan','EXPENSE',0.00,'2026-03-26 09:34:16'),(19,'5-2000','Beban Operasional','EXPENSE',0.00,'2026-03-26 09:34:16'),(20,'5-2001','Beban Gaji','EXPENSE',0.00,'2026-03-26 09:34:16'),(21,'5-2002','Beban Sewa','EXPENSE',0.00,'2026-03-26 09:34:16'),(22,'5-2003','Beban Listrik & Air','EXPENSE',0.00,'2026-03-26 09:34:16'),(23,'5-3000','Beban Ongkos Kirim','EXPENSE',0.00,'2026-03-26 09:34:16');
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,12 +86,13 @@ CREATE TABLE `customers` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` text COLLATE utf8mb4_unicode_ci,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `is_verified` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +101,7 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES (1,'Budi Santoso','081234567890',NULL,'$2a$10$YtzMTq4JjT/xRyWfafyDzuEV64JJyAHGmYggRSN04Wfm1LeY0gD86','2026-03-26 11:11:10',1),(2,'Siti Aminah','081298765432',NULL,'$2a$10$Y//UbaTppq71xCCv/eemjeAbQrTLvrRalMksgPHRZ8yL1nwkAZo4G','2026-03-26 11:16:26',1),(3,'udin','0000','ss','$2a$10$vy9th3ZPikrci02i8JToPe0faYxdnowRCeM1CjxC7IOjv4kFm0kbW','2026-03-26 11:19:30',1);
+INSERT INTO `customers` VALUES (1,'Budi Santoso','081234567890',NULL,NULL,'$2a$10$YtzMTq4JjT/xRyWfafyDzuEV64JJyAHGmYggRSN04Wfm1LeY0gD86','2026-03-26 11:11:10',1),(2,'Siti Aminah','081298765432',NULL,NULL,'$2a$10$Y//UbaTppq71xCCv/eemjeAbQrTLvrRalMksgPHRZ8yL1nwkAZo4G','2026-03-26 11:16:26',1),(3,'udin','0000','ss',NULL,'$2a$10$vy9th3ZPikrci02i8JToPe0faYxdnowRCeM1CjxC7IOjv4kFm0kbW','2026-03-26 11:19:30',1),(4,'Test Pelanggan','08123456789',NULL,NULL,'$2a$10$sb65DccgD8sTmV.0HC0Nl.7Vcr6qNIoveZpwC.Kyz9ewcO88aSSfu','2026-03-27 06:31:49',1);
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +128,7 @@ CREATE TABLE `hutang` (
   UNIQUE KEY `reference` (`reference`),
   KEY `created_by` (`created_by`),
   CONSTRAINT `hutang_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +137,7 @@ CREATE TABLE `hutang` (
 
 LOCK TABLES `hutang` WRITE;
 /*!40000 ALTER TABLE `hutang` DISABLE KEYS */;
-INSERT INTO `hutang` VALUES (1,'HT-2024-001','2024-01-05','2024-02-05','PT Asus Indonesia','Hutang pembelian laptop',65000000.00,65000000.00,'LUNAS',1,'2026-03-26 10:04:56'),(2,'HT-2024-002','2024-01-08','2024-03-08','CV Logitech Jaya','Hutang pembelian mouse',6000000.00,3000000.00,'BELUM_LUNAS',1,'2026-03-26 10:04:56'),(3,'HT-2024-003','2024-01-22','2024-04-22','PT Monitor Global','Hutang pembelian monitor',27000000.00,0.00,'BELUM_LUNAS',1,'2026-03-26 10:04:56');
+INSERT INTO `hutang` VALUES (1,'HT-2024-001','2024-01-05','2024-02-05','PT Asus Indonesia','Hutang pembelian laptop',65000000.00,65000000.00,'LUNAS',1,'2026-03-26 10:04:56'),(2,'HT-2024-002','2024-01-08','2024-03-08','CV Logitech Jaya','Hutang pembelian mouse',6000000.00,3000000.00,'BELUM_LUNAS',1,'2026-03-26 10:04:56'),(3,'HT-2024-003','2024-01-22','2024-04-22','PT Monitor Global','Hutang pembelian monitor',27000000.00,0.00,'BELUM_LUNAS',1,'2026-03-26 10:04:56'),(4,'HTG-INV-1774590508234','2026-03-27','2026-04-26','Pelanggan Umum','Hutang penjualan INV-1774590508234',75000.00,60000.00,'BELUM_LUNAS',1,'2026-03-27 05:48:28'),(5,'TG-1775089906605','2026-04-02','2026-05-02','Pelanggan Umum','Penjualan TG-1775089906605 (Telegram) - Hutang',25500000.00,0.00,'BELUM_LUNAS',1,'2026-04-02 00:31:46');
 /*!40000 ALTER TABLE `hutang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,7 +159,7 @@ CREATE TABLE `journal_details` (
   KEY `account_id` (`account_id`),
   CONSTRAINT `journal_details_ibfk_1` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`) ON DELETE CASCADE,
   CONSTRAINT `journal_details_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +168,7 @@ CREATE TABLE `journal_details` (
 
 LOCK TABLES `journal_details` WRITE;
 /*!40000 ALTER TABLE `journal_details` DISABLE KEYS */;
-INSERT INTO `journal_details` VALUES (1,1,20,400000.00,400000.00),(2,1,1,0.00,0.00);
+INSERT INTO `journal_details` VALUES (1,1,20,400000.00,400000.00),(2,1,1,0.00,0.00),(3,2,3,1000000.00,0.00),(4,2,16,0.00,1000000.00),(5,3,6,250000.00,0.00),(6,3,3,0.00,250000.00),(7,4,3,225000.00,0.00),(8,4,15,0.00,225000.00),(11,6,3,5150000.00,0.00),(12,6,15,0.00,5150000.00),(13,7,3,25500000.00,0.00),(14,7,15,0.00,25500000.00);
 /*!40000 ALTER TABLE `journal_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,7 +189,7 @@ CREATE TABLE `journal_entries` (
   PRIMARY KEY (`id`),
   KEY `created_by` (`created_by`),
   CONSTRAINT `journal_entries_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +198,7 @@ CREATE TABLE `journal_entries` (
 
 LOCK TABLES `journal_entries` WRITE;
 /*!40000 ALTER TABLE `journal_entries` DISABLE KEYS */;
-INSERT INTO `journal_entries` VALUES (1,'2026-03-26','okta',NULL,1,'2026-03-26 11:44:06');
+INSERT INTO `journal_entries` VALUES (1,'2026-03-26','okta',NULL,1,'2026-03-26 11:44:06'),(2,'2026-04-01','Kas: KAs masuk','KAS-1775007815830',1,'2026-04-01 01:43:51'),(3,'2026-04-01','Kas: Pembelian PO-1775007840158','PO-1775007840158',1,'2026-04-01 01:44:18'),(4,'2026-04-01','Kas: Penjualan INV-1775007913383','INV-1775007913383',1,'2026-04-01 01:45:13'),(6,'2026-04-02','Kas: Penjualan TG-1775089232548 (Telegram)','TG-1775089232548',1,'2026-04-02 00:20:32'),(7,'2026-04-02','Kas: Penjualan TG-1775089710333 (Telegram)','TG-1775089710333',1,'2026-04-02 00:28:30');
 /*!40000 ALTER TABLE `journal_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +223,7 @@ CREATE TABLE `kas` (
   UNIQUE KEY `reference` (`reference`),
   KEY `created_by` (`created_by`),
   CONSTRAINT `kas_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,7 +232,7 @@ CREATE TABLE `kas` (
 
 LOCK TABLES `kas` WRITE;
 /*!40000 ALTER TABLE `kas` DISABLE KEYS */;
-INSERT INTO `kas` VALUES (1,'KAS-2024-001','2024-01-02','MASUK','Modal Awal','Setoran modal pemilik',80000000.00,1,'2026-03-26 10:04:56'),(2,'KAS-2024-002','2024-01-05','KELUAR','PT Asus Indonesia','Pembayaran hutang laptop',65000000.00,1,'2026-03-26 10:04:56'),(3,'KAS-2024-003','2024-01-10','MASUK','Budi Santoso','Penjualan INV-2024-001',8500000.00,1,'2026-03-26 10:04:56'),(4,'KAS-2024-004','2024-01-15','KELUAR','Biaya Operasional','Bayar listrik & air',500000.00,1,'2026-03-26 10:04:56'),(5,'KAS-2024-005','2024-01-20','MASUK','Siti Nuraini','Penjualan INV-2024-005',2400000.00,1,'2026-03-26 10:04:56');
+INSERT INTO `kas` VALUES (6,'KAS-1775007815830','2026-04-01','MASUK','ZOhro','KAs masuk',1000000.00,1,'2026-04-01 01:43:51'),(7,'PO-1775007840158','2026-04-01','KELUAR','x','Pembelian PO-1775007840158',250000.00,1,'2026-04-01 01:44:18'),(8,'INV-1775007913383','2026-04-01','MASUK','Pelanggan Umum','Penjualan INV-1775007913383',225000.00,1,'2026-04-01 01:45:13'),(10,'TG-1775089232548','2026-04-02','MASUK','Pelanggan Umum','Penjualan TG-1775089232548 (Telegram)',5150000.00,1,'2026-04-02 00:20:32'),(11,'TG-1775089710333','2026-04-02','MASUK','Pelanggan Umum','Penjualan TG-1775089710333 (Telegram)',25500000.00,1,'2026-04-02 00:28:30');
 /*!40000 ALTER TABLE `kas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -246,7 +247,7 @@ CREATE TABLE `order_items` (
   `id` int NOT NULL AUTO_INCREMENT,
   `order_id` int NOT NULL,
   `product_id` int NOT NULL,
-  `qty` int NOT NULL DEFAULT '1',
+  `qty` decimal(12,3) NOT NULL DEFAULT '1.000',
   `price` decimal(15,2) NOT NULL DEFAULT '0.00',
   `subtotal` decimal(15,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`),
@@ -263,7 +264,7 @@ CREATE TABLE `order_items` (
 
 LOCK TABLES `order_items` WRITE;
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
-INSERT INTO `order_items` VALUES (1,1,5,1,95000.00,95000.00),(2,2,3,2,520000.00,1040000.00),(3,3,5,1,95000.00,95000.00),(4,4,5,2,95000.00,190000.00),(5,4,3,1,520000.00,520000.00),(6,5,5,2,95000.00,190000.00),(7,6,5,1,95000.00,95000.00),(8,6,3,1,520000.00,520000.00),(9,6,1,1,8500000.00,8500000.00);
+INSERT INTO `order_items` VALUES (1,1,5,1.000,95000.00,95000.00),(2,2,3,2.000,520000.00,1040000.00),(3,3,5,1.000,95000.00,95000.00),(4,4,5,2.000,95000.00,190000.00),(5,4,3,1.000,520000.00,520000.00),(6,5,5,2.000,95000.00,190000.00),(7,6,5,1.000,95000.00,95000.00),(8,6,3,1.000,520000.00,520000.00),(9,6,1,1.000,8500000.00,8500000.00);
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,6 +313,8 @@ CREATE TABLE `products` (
   `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `unit` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'pcs',
+  `buy_unit` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'kg',
+  `sell_unit` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'pcs',
   `buy_content` decimal(10,3) DEFAULT '1.000',
   `sell_content` decimal(10,3) DEFAULT '1.000',
   `stock` decimal(12,3) NOT NULL DEFAULT '0.000',
@@ -321,7 +324,7 @@ CREATE TABLE `products` (
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -330,7 +333,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'PRD-001','Laptop Asus VivoBook','Elektronik','unit',1.000,1.000,9.000,6500000.00,8500000.00,'2026-03-26 09:34:16',NULL),(2,'PRD-002','Mouse Wireless Logitech','Aksesoris','unit',1.000,1.000,50.000,120000.00,185000.00,'2026-03-26 09:34:16',NULL),(3,'PRD-003','Keyboard Mechanical','Aksesoris','unit',1.000,1.000,26.000,350000.00,520000.00,'2026-03-26 09:34:16',NULL),(4,'PRD-004','Monitor LG 24\"','Elektronik','unit',1.000,1.000,29.000,1800000.00,2500000.00,'2026-03-26 09:34:16',NULL),(5,'PRD-005','Flash Disk 64GB','Aksesoris','kg',1.000,0.500,98.000,55000.00,95000.00,'2026-03-26 09:34:16','/uploads/product-1774523317020.jpeg');
+INSERT INTO `products` VALUES (1,'PRD-001','Laptop Asus VivoBook','Elektronik','unit','unit','unit',1.000,1.000,55.000,6500000.00,8500000.00,'2026-03-26 09:34:16',NULL),(2,'PRD-002','Mouse Wireless Logitech','Aksesoris','unit','unit','unit',1.000,1.000,1.000,120000.00,185000.00,'2026-03-26 09:34:16',NULL),(3,'PRD-003','Keyboard Mechanical','Aksesoris','unit','unit','unit',1.000,1.000,-1.000,350000.00,520000.00,'2026-03-26 09:34:16',NULL),(4,'PRD-004','Monitor LG 24\"','Elektronik','unit','unit','unit',1.000,1.000,0.000,1800000.00,2500000.00,'2026-03-26 09:34:16',NULL),(5,'PRD-005','Flash Disk 64GB',NULL,'kg','kg','pcs',1.000,0.500,3.000,50000.00,75000.00,'2026-03-26 09:34:16','/uploads/product-1774523317020.jpeg'),(6,'QQ','qq','','kg','kg','pcs',1.000,0.500,1.000,1000.00,700.00,'2026-03-26 23:27:48',NULL);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,7 +348,7 @@ CREATE TABLE `purchase_items` (
   `id` int NOT NULL AUTO_INCREMENT,
   `purchase_id` int NOT NULL,
   `product_id` int NOT NULL,
-  `quantity` int NOT NULL DEFAULT '1',
+  `quantity` decimal(12,3) NOT NULL DEFAULT '1.000',
   `unit_price` decimal(18,2) NOT NULL DEFAULT '0.00',
   `subtotal` decimal(18,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`),
@@ -353,7 +356,7 @@ CREATE TABLE `purchase_items` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `purchase_items_ibfk_1` FOREIGN KEY (`purchase_id`) REFERENCES `purchases` (`id`) ON DELETE CASCADE,
   CONSTRAINT `purchase_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,7 +365,6 @@ CREATE TABLE `purchase_items` (
 
 LOCK TABLES `purchase_items` WRITE;
 /*!40000 ALTER TABLE `purchase_items` DISABLE KEYS */;
-INSERT INTO `purchase_items` VALUES (1,1,1,10,6500000.00,65000000.00),(2,2,2,50,120000.00,6000000.00),(3,3,4,15,1800000.00,27000000.00),(5,5,5,2,55000.00,110000.00);
 /*!40000 ALTER TABLE `purchase_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -378,17 +380,21 @@ CREATE TABLE `purchases` (
   `po_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `supplier_name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `supplier_address` text COLLATE utf8mb4_unicode_ci,
   `subtotal` decimal(18,2) NOT NULL DEFAULT '0.00',
   `total` decimal(18,2) NOT NULL DEFAULT '0.00',
   `status` enum('DRAFT','ORDERED','RECEIVED','CANCELLED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'DRAFT',
   `notes` text COLLATE utf8mb4_unicode_ci,
   `created_by` int DEFAULT NULL,
+  `warehouse_id` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `po_number` (`po_number`),
   KEY `created_by` (`created_by`),
-  CONSTRAINT `purchases_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `warehouse_id` (`warehouse_id`),
+  CONSTRAINT `purchases_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `purchases_ibfk_2` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -397,7 +403,6 @@ CREATE TABLE `purchases` (
 
 LOCK TABLES `purchases` WRITE;
 /*!40000 ALTER TABLE `purchases` DISABLE KEYS */;
-INSERT INTO `purchases` VALUES (1,'PO-2024-001','2024-01-05','PT Asus Indonesia',65000000.00,65000000.00,'RECEIVED',NULL,1,'2026-03-26 09:34:16'),(2,'PO-2024-002','2024-01-08','CV Logitech Jaya',6000000.00,6000000.00,'RECEIVED',NULL,1,'2026-03-26 09:34:16'),(3,'PO-2024-003','2024-01-22','PT Monitor Global',27000000.00,27000000.00,'RECEIVED',NULL,1,'2026-03-26 09:34:16'),(5,'PO-1774541144020','2026-03-26','uu\\',110000.00,110000.00,'RECEIVED',NULL,1,'2026-03-26 16:05:58');
 /*!40000 ALTER TABLE `purchases` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -442,7 +447,7 @@ CREATE TABLE `sale_items` (
   `id` int NOT NULL AUTO_INCREMENT,
   `sale_id` int NOT NULL,
   `product_id` int NOT NULL,
-  `quantity` int NOT NULL DEFAULT '1',
+  `quantity` decimal(12,3) NOT NULL DEFAULT '1.000',
   `unit_price` decimal(18,2) NOT NULL DEFAULT '0.00',
   `subtotal` decimal(18,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`),
@@ -450,7 +455,7 @@ CREATE TABLE `sale_items` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `sale_items_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `sales` (`id`) ON DELETE CASCADE,
   CONSTRAINT `sale_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -459,7 +464,6 @@ CREATE TABLE `sale_items` (
 
 LOCK TABLES `sale_items` WRITE;
 /*!40000 ALTER TABLE `sale_items` DISABLE KEYS */;
-INSERT INTO `sale_items` VALUES (1,1,1,1,8500000.00,8500000.00),(2,2,2,1,185000.00,185000.00),(3,3,3,1,520000.00,520000.00),(4,4,2,2,185000.00,370000.00),(5,5,4,1,2500000.00,2500000.00),(6,6,5,1,95000.00,95000.00),(7,6,4,1,2500000.00,2500000.00);
 /*!40000 ALTER TABLE `sale_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -475,6 +479,7 @@ CREATE TABLE `sales` (
   `invoice_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `customer_name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_address` text COLLATE utf8mb4_unicode_ci,
   `channel` enum('DIRECT') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'DIRECT',
   `platform_order_id` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `subtotal` decimal(18,2) NOT NULL DEFAULT '0.00',
@@ -484,12 +489,15 @@ CREATE TABLE `sales` (
   `status` enum('DRAFT','CONFIRMED','SHIPPED','DONE','CANCELLED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'DRAFT',
   `notes` text COLLATE utf8mb4_unicode_ci,
   `created_by` int DEFAULT NULL,
+  `warehouse_id` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `invoice_number` (`invoice_number`),
   KEY `created_by` (`created_by`),
-  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `warehouse_id` (`warehouse_id`),
+  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `sales_ibfk_2` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -498,8 +506,75 @@ CREATE TABLE `sales` (
 
 LOCK TABLES `sales` WRITE;
 /*!40000 ALTER TABLE `sales` DISABLE KEYS */;
-INSERT INTO `sales` VALUES (1,'INV-2024-001','2024-01-10','Budi Santoso','DIRECT',NULL,8500000.00,0.00,0.00,8500000.00,'DONE',NULL,1,'2026-03-26 09:34:16'),(2,'INV-2024-002','2024-01-12','Dewi Rahayu','DIRECT',NULL,185000.00,0.00,15000.00,200000.00,'DONE',NULL,1,'2026-03-26 09:34:16'),(3,'INV-2024-003','2024-01-15','Rina Kusuma','DIRECT',NULL,520000.00,20000.00,10000.00,510000.00,'SHIPPED',NULL,1,'2026-03-26 09:34:16'),(4,'INV-2024-004','2024-01-18','Ahmad Fauzi','DIRECT',NULL,370000.00,0.00,20000.00,390000.00,'CONFIRMED',NULL,1,'2026-03-26 09:34:16'),(5,'INV-2024-005','2024-01-20','Siti Nuraini','DIRECT',NULL,2500000.00,100000.00,0.00,2400000.00,'DONE',NULL,1,'2026-03-26 09:34:16'),(6,'INV-1774518309231','2026-03-26','udin','DIRECT',NULL,2595000.00,0.00,0.00,2595000.00,'DRAFT',NULL,1,'2026-03-26 09:45:52');
 /*!40000 ALTER TABLE `sales` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stock_transfer_items`
+--
+
+DROP TABLE IF EXISTS `stock_transfer_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `stock_transfer_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `transfer_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `quantity` decimal(12,3) NOT NULL DEFAULT '0.000',
+  PRIMARY KEY (`id`),
+  KEY `transfer_id` (`transfer_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `stock_transfer_items_ibfk_1` FOREIGN KEY (`transfer_id`) REFERENCES `stock_transfers` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `stock_transfer_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stock_transfer_items`
+--
+
+LOCK TABLES `stock_transfer_items` WRITE;
+/*!40000 ALTER TABLE `stock_transfer_items` DISABLE KEYS */;
+INSERT INTO `stock_transfer_items` VALUES (1,1,1,10.000),(2,2,1,10.000);
+/*!40000 ALTER TABLE `stock_transfer_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stock_transfers`
+--
+
+DROP TABLE IF EXISTS `stock_transfers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `stock_transfers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `transfer_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `from_warehouse_id` int NOT NULL,
+  `to_warehouse_id` int NOT NULL,
+  `status` enum('DRAFT','CONFIRMED','CANCELLED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'DRAFT',
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `created_by` int DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `transfer_number` (`transfer_number`),
+  KEY `from_warehouse_id` (`from_warehouse_id`),
+  KEY `to_warehouse_id` (`to_warehouse_id`),
+  KEY `created_by` (`created_by`),
+  CONSTRAINT `stock_transfers_ibfk_1` FOREIGN KEY (`from_warehouse_id`) REFERENCES `warehouses` (`id`),
+  CONSTRAINT `stock_transfers_ibfk_2` FOREIGN KEY (`to_warehouse_id`) REFERENCES `warehouses` (`id`),
+  CONSTRAINT `stock_transfers_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stock_transfers`
+--
+
+LOCK TABLES `stock_transfers` WRITE;
+/*!40000 ALTER TABLE `stock_transfers` DISABLE KEYS */;
+INSERT INTO `stock_transfers` VALUES (1,'TRF-2026-001','2026-03-27',1,2,'CONFIRMED','Test transfer',1,'2026-03-27 06:52:50'),(2,'TRF-2026-002','2026-03-27',1,2,'CONFIRMED','Test transfer',1,'2026-03-27 06:53:09');
+/*!40000 ALTER TABLE `stock_transfers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -520,7 +595,7 @@ CREATE TABLE `user_access` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_user_menu` (`user_id`,`menu`),
   CONSTRAINT `user_access_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -529,7 +604,7 @@ CREATE TABLE `user_access` (
 
 LOCK TABLES `user_access` WRITE;
 /*!40000 ALTER TABLE `user_access` DISABLE KEYS */;
-INSERT INTO `user_access` VALUES (1,1,'accounts',1,1,1,1),(2,1,'dashboard',1,1,1,1),(3,1,'hutang',1,1,1,1),(4,1,'inventory',1,1,1,1),(5,1,'journal',1,1,1,1),(6,1,'kas',1,1,1,1),(7,1,'purchases',1,1,1,1),(8,1,'reports',1,1,1,1),(9,1,'sales',1,1,1,1),(10,1,'users',1,1,1,1),(11,2,'dashboard',1,1,1,0),(12,2,'accounts',0,0,0,0),(13,2,'journal',0,0,0,0),(14,2,'sales',1,1,1,1),(15,2,'purchases',1,1,1,1),(16,2,'inventory',0,0,0,0),(17,2,'kas',0,0,0,0),(18,2,'hutang',1,1,1,1),(19,2,'reports',0,0,0,0),(20,2,'users',0,0,0,0);
+INSERT INTO `user_access` VALUES (1,1,'accounts',1,1,1,1),(2,1,'dashboard',1,1,1,1),(3,1,'hutang',1,1,1,1),(4,1,'inventory',1,1,1,1),(5,1,'journal',1,1,1,1),(6,1,'kas',1,1,1,1),(7,1,'purchases',1,1,1,1),(8,1,'reports',1,1,1,1),(9,1,'sales',1,1,1,1),(10,1,'users',1,1,1,1),(21,2,'dashboard',1,1,1,0),(22,2,'accounts',0,0,0,0),(23,2,'journal',0,0,0,0),(24,2,'sales',1,1,1,1),(25,2,'purchases',1,1,1,1),(26,2,'inventory',1,1,1,1),(27,2,'kas',0,0,0,0),(28,2,'hutang',1,1,1,1),(29,2,'reports',0,0,0,0),(30,2,'users',0,0,0,0);
 /*!40000 ALTER TABLE `user_access` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -551,7 +626,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -560,13 +635,68 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','admin@sagara.id','$2a$10$5azTQPnYFdRgt0bNb7zHa.0fUFucs3MtTXC.fdypPNpf6nJGiFzZe','admin',1,'2026-03-26 09:34:16'),(2,'okta','pp','$2a$10$j96jn8uRwaOuk0R7r0RlW.Ii3t93xE5nCPRkNexHA/77rYrcfI6HS','user',1,'2026-03-26 10:19:16');
+INSERT INTO `users` VALUES (1,'admin','admin@sagara.id','$2a$10$6cxeznIlqIoAUqFgeueSLeYLJyBRKOz.F1JKr.iO./WZgNFqKQJLm','admin',1,'2026-03-26 09:34:16'),(2,'okta','pp','$2a$10$j96jn8uRwaOuk0R7r0RlW.Ii3t93xE5nCPRkNexHA/77rYrcfI6HS','user',1,'2026-03-26 10:19:16');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'sagara_db'
+-- Table structure for table `warehouse_stock`
 --
+
+DROP TABLE IF EXISTS `warehouse_stock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `warehouse_stock` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `warehouse_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `stock` decimal(12,3) NOT NULL DEFAULT '0.000',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_wh_product` (`warehouse_id`,`product_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `warehouse_stock_ibfk_1` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `warehouse_stock_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `warehouse_stock`
+--
+
+LOCK TABLES `warehouse_stock` WRITE;
+/*!40000 ALTER TABLE `warehouse_stock` DISABLE KEYS */;
+INSERT INTO `warehouse_stock` VALUES (1,1,1,41.000),(3,2,1,20.000),(13,1,6,1.500),(14,1,5,5.500),(15,1,4,2.000),(18,1,2,3.000),(19,1,3,1.000);
+/*!40000 ALTER TABLE `warehouse_stock` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `warehouses`
+--
+
+DROP TABLE IF EXISTS `warehouses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `warehouses` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `warehouses`
+--
+
+LOCK TABLES `warehouses` WRITE;
+/*!40000 ALTER TABLE `warehouses` DISABLE KEYS */;
+INSERT INTO `warehouses` VALUES (1,'Gudang Utama','Lokasi utama',NULL,1,'2026-03-27 06:33:56'),(2,'Gudang Cabang','Lokasi cabang','08123',1,'2026-03-27 06:52:22');
+/*!40000 ALTER TABLE `warehouses` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -577,4 +707,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-26 16:09:32
+-- Dump completed on 2026-04-02  1:31:03
