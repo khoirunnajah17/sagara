@@ -5,9 +5,13 @@ const multer = require('multer');
 const path   = require('path');
 const fs     = require('fs');
 
+// Auto-create uploads folder
+const uploadsDir = path.join(__dirname, '../public/uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
 // Multer config for product images
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads')),
+    destination: (req, file, cb) => cb(null, uploadsDir),
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname).toLowerCase();
         cb(null, 'product-' + Date.now() + ext);
@@ -23,6 +27,20 @@ const upload = multer({
         else cb(new Error('Format file tidak didukung.'));
     }
 });
+
+// Multer error handler middleware
+function handleUpload(fieldName) {
+    return (req, res, next) => {
+        upload.single(fieldName)(req, res, (err) => {
+            if (err instanceof multer.MulterError) {
+                return res.status(400).json({ success: false, message: 'Upload error: ' + err.message });
+            } else if (err) {
+                return res.status(400).json({ success: false, message: err.message });
+            }
+            next();
+        });
+    };
+}
 
 // GET all products
 router.get('/', auth, async (req, res) => {
@@ -52,7 +70,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // POST create product
-router.post('/', auth, upload.single('image'), async (req, res) => {
+router.post('/', auth, handleUpload('image'), async (req, res) => {
     const { code, name, category, unit, buy_unit, sell_unit, buy_content, sell_content, stock, cost_price, sell_price } = req.body;
     if (!code || !name)
         return res.status(400).json({ success: false, message: 'Kode dan nama produk wajib diisi.' });
@@ -71,7 +89,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
 });
 
 // PUT update product
-router.put('/:id', auth, upload.single('image'), async (req, res) => {
+router.put('/:id', auth, handleUpload('image'), async (req, res) => {
     const { code, name, category, unit, buy_unit, sell_unit, buy_content, sell_content, stock, cost_price, sell_price } = req.body;
     try {
         let image = undefined;

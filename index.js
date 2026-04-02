@@ -193,6 +193,12 @@ app.delete('/api/nota-design', (req, res) => {
 // Root → serve home.html directly (avoid redirect issues on Codespaces)
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'src/public/home.html')));
 
+// Global error handler — always return JSON, never HTML
+app.use((err, req, res, next) => {
+    console.error('Global error:', err.message);
+    res.status(err.status || 500).json({ success: false, message: err.message || 'Internal Server Error' });
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Sagara Meat House berjalan di http://localhost:${PORT}`);
 
