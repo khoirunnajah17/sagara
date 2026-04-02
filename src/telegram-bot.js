@@ -44,7 +44,11 @@ function startBot(token) {
     }
 
     const bot = new TelegramBot(token, { polling: true });
-    console.log('🤖 Telegram Bot Kasir aktif!');
+    console.log('🤖 Telegram Bot Kasir aktif! (polling started)');
+
+    bot.on('polling_error', (err) => {
+        console.error('Telegram polling error:', err.code, err.message);
+    });
 
     // ── Helper: send product list with inline "Tambah" buttons ──
     async function sendProductList(chatId, products, title) {

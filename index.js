@@ -30,6 +30,7 @@ app.get('/api/health', async (req, res) => {
         res.json({
             status: 'OK',
             db_connected: true,
+            telegram_token_set: !!process.env.TELEGRAM_BOT_TOKEN,
             tables_count: tables.length,
             tables: tables.map(t => Object.values(t)[0]),
             env: {
@@ -203,8 +204,18 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Sagara Meat House berjalan di http://localhost:${PORT}`);
 
     // Start Telegram Bot
-    const { startBot } = require('./src/telegram-bot');
-    startBot(process.env.TELEGRAM_BOT_TOKEN);
+    if (process.env.TELEGRAM_BOT_TOKEN) {
+        console.log('Telegram Bot: token ditemukan, memulai bot...');
+        try {
+            const { startBot } = require('./src/telegram-bot');
+            startBot(process.env.TELEGRAM_BOT_TOKEN);
+            console.log('Telegram Bot: startBot() berhasil dipanggil');
+        } catch (err) {
+            console.error('Telegram Bot: GAGAL start -', err.message);
+        }
+    } else {
+        console.log('Telegram Bot: TELEGRAM_BOT_TOKEN tidak ditemukan di .env, bot tidak dijalankan');
+    }
 });
 
 module.exports = app;
