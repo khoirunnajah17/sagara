@@ -29,8 +29,7 @@ const mainMenu = {
             [{ text: '📦 Produk' }, { text: '🔍 Cari Produk' }],
             [{ text: '🛒 Keranjang' }, { text: '💰 Bayar' }],
             [{ text: '👤 Pelanggan' }, { text: '🗑️ Kosongkan' }],
-            [{ text: '📋 Riwayat' }, { text: '💵 Saldo' }],
-            [{ text: '📒 Hutang' }],
+            [{ text: '📋 Riwayat' }, { text: '📒 Hutang' }],
         ],
         resize_keyboard: true,
         one_time_keyboard: false,
@@ -1031,34 +1030,10 @@ function startBot(token) {
             return;
         }
 
-        if (text === '� Hutang' || text === '/hutang') {
+        if (text === '📒 Hutang' || text === '/hutang') {
             await showHutangList(chatId, 'ALL');
             return;
         }
-
-        if (text === '�💵 Saldo' || text === '/saldo') {
-            try {
-                const [[masuk]] = await pool.query(
-                    `SELECT COALESCE(SUM(amount),0) as total FROM kas WHERE type = 'MASUK'`
-                );
-                const [[keluar]] = await pool.query(
-                    `SELECT COALESCE(SUM(amount),0) as total FROM kas WHERE type = 'KELUAR'`
-                );
-                const saldo = parseFloat(masuk.total) - parseFloat(keluar.total);
-                bot.sendMessage(chatId,
-                    `💵 *Saldo Kas:*\n\n` +
-                    `📈 Masuk: ${formatRupiah(masuk.total)}\n` +
-                    `📉 Keluar: ${formatRupiah(keluar.total)}\n` +
-                    `━━━━━━━━━━━━━━━━━━━\n` +
-                    `💰 *Saldo: ${formatRupiah(saldo)}*`,
-                    mainMenu
-                );
-            } catch (e) {
-                bot.sendMessage(chatId, '❌ Gagal: ' + e.message);
-            }
-            return;
-        }
-
         // ── /start ──────────────────────────────────────────
         if (text === '/start') {
             bot.sendMessage(chatId,
@@ -1071,7 +1046,6 @@ function startBot(token) {
                 `👤 *Pelanggan* — Set nama pelanggan\n` +
                 `🗑️ *Kosongkan* — Hapus keranjang\n` +
                 `📋 *Riwayat* — Transaksi terakhir\n` +
-                `💵 *Saldo* — Cek saldo kas\n` +
                 `📒 *Hutang* — Kelola & bayar hutang`,
                 mainMenu
             );
