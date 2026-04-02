@@ -61,7 +61,7 @@ function startBot(token) {
                 const stok = parseFloat(p.stock) || 0;
                 const icon = stok <= 0 ? '🔴' : stok <= 5 ? '🟡' : '🟢';
                 text += `${icon} \`${p.code}\` *${p.name}*\n`;
-                text += `   ${formatRupiah(p.sell_price)}/${p.sell_unit || 'pcs'} — Stok: ${stok}\n`;
+                text += `   ${formatRupiah(p.sell_price)}/${p.unit || 'pcs'} — Stok: ${stok}\n`;
 
                 if (stok > 0) {
                     buttons.push([
@@ -102,7 +102,7 @@ function startBot(token) {
     async function addToCart(chatId, code, qty) {
         try {
             const [[product]] = await pool.query(
-                'SELECT id, code, name, sell_price, stock, sell_unit, sell_content FROM products WHERE code = ? LIMIT 1',
+                'SELECT id, code, name, sell_price, stock, unit, sell_content FROM products WHERE code = ? LIMIT 1',
                 [code]
             );
             if (!product) return bot.sendMessage(chatId, `❌ Produk \`${code}\` tidak ditemukan.`, { parse_mode: 'Markdown' });
@@ -124,7 +124,7 @@ function startBot(token) {
                     name: product.name,
                     qty,
                     price: parseFloat(product.sell_price),
-                    unit: product.sell_unit || 'pcs'
+                    unit: product.unit || 'pcs'
                 });
             }
 
@@ -629,7 +629,7 @@ function startBot(token) {
         if (data === 'menu_produk') {
             try {
                 const [products] = await pool.query(
-                    'SELECT code, name, sell_price, stock, sell_unit FROM products WHERE stock > 0 ORDER BY name LIMIT 30'
+                    'SELECT code, name, sell_price, stock, unit FROM products WHERE stock > 0 ORDER BY name LIMIT 30'
                 );
                 await sendProductList(chatId, products, '📦 *Daftar Produk:*');
             } catch (e) {
@@ -651,9 +651,9 @@ function startBot(token) {
             const code = data.replace('add_', '');
             try {
                 const [[p]] = await pool.query(
-                    'SELECT code, name, sell_price, sell_unit FROM products WHERE code = ?', [code]
+                    'SELECT code, name, sell_price, unit FROM products WHERE code = ?', [code]
                 );
-                if (p) sendQtyPicker(chatId, p.code, p.name, parseFloat(p.sell_price), p.sell_unit || 'pcs');
+                if (p) sendQtyPicker(chatId, p.code, p.name, parseFloat(p.sell_price), p.unit || 'pcs');
             } catch (e) {
                 bot.sendMessage(chatId, '❌ Gagal: ' + e.message);
             }
@@ -736,7 +736,7 @@ function startBot(token) {
             const offset = parseInt(data.replace('page_', ''));
             try {
                 const [products] = await pool.query(
-                    'SELECT code, name, sell_price, stock, sell_unit FROM products WHERE stock > 0 ORDER BY name LIMIT 5 OFFSET ?',
+                    'SELECT code, name, sell_price, stock, unit FROM products WHERE stock > 0 ORDER BY name LIMIT 5 OFFSET ?',
                     [offset]
                 );
                 await sendProductList(chatId, products, '📦 *Daftar Produk:*');
@@ -822,7 +822,7 @@ function startBot(token) {
             delete userState[chatId];
             try {
                 const [products] = await pool.query(
-                    'SELECT code, name, sell_price, stock, sell_unit FROM products WHERE name LIKE ? OR code LIKE ? LIMIT 10',
+                    'SELECT code, name, sell_price, stock, unit FROM products WHERE name LIKE ? OR code LIKE ? LIMIT 10',
                     [`%${text}%`, `%${text}%`]
                 );
                 await sendProductList(chatId, products, `🔍 *Hasil pencarian "${text}":*`);
@@ -952,7 +952,7 @@ function startBot(token) {
         if (text === '📦 Produk' || text === '/produk') {
             try {
                 const [products] = await pool.query(
-                    'SELECT code, name, sell_price, stock, sell_unit FROM products WHERE stock > 0 ORDER BY name LIMIT 30'
+                    'SELECT code, name, sell_price, stock, unit FROM products WHERE stock > 0 ORDER BY name LIMIT 30'
                 );
                 await sendProductList(chatId, products, '📦 *Daftar Produk:*');
             } catch (e) {
@@ -1067,7 +1067,7 @@ function startBot(token) {
             const keyword = cariMatch[1].trim();
             try {
                 const [products] = await pool.query(
-                    'SELECT code, name, sell_price, stock, sell_unit FROM products WHERE name LIKE ? OR code LIKE ? LIMIT 10',
+                    'SELECT code, name, sell_price, stock, unit FROM products WHERE name LIKE ? OR code LIKE ? LIMIT 10',
                     [`%${keyword}%`, `%${keyword}%`]
                 );
                 await sendProductList(chatId, products, `🔍 *Hasil pencarian "${keyword}":*`);
@@ -1091,7 +1091,7 @@ function startBot(token) {
             // User typed something that's not a command — search products
             try {
                 const [products] = await pool.query(
-                    'SELECT code, name, sell_price, stock, sell_unit FROM products WHERE name LIKE ? OR code LIKE ? LIMIT 10',
+                    'SELECT code, name, sell_price, stock, unit FROM products WHERE name LIKE ? OR code LIKE ? LIMIT 10',
                     [`%${text}%`, `%${text}%`]
                 );
                 if (products.length) {
