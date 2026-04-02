@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Persediaan – Sagara Accounting</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Stok & Gudang – Sagara Meat House</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="layout">
   <aside class="sidebar">
-    <div class="sidebar-logo"><h2>💼 Sagara Accounting</h2><span>Sistem Akuntansi</span></div>
+    <div class="sidebar-logo"><img src="/api/logo" alt="Logo" class="sidebar-logo-img"><h2>Sagara Meat House</h2><span>Sistem Akuntansi</span></div>
     <nav class="sidebar-nav">
       <div class="nav-section">Menu Utama</div>
       <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
@@ -17,44 +20,159 @@
       <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
       <div class="nav-section">Transaksi</div>
       <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
       <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
-      <a href="/inventory.html" class="active"><span class="nav-icon">🏪</span> <span>Persediaan</span></a>
+      <a href="/inventory.html" class="active"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
+      <a href="/orders.html"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
+      <div class="nav-section">Keuangan</div>
+      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
       <div class="nav-section">Laporan</div>
       <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+      <div class="nav-section">Pengaturan</div>
+      <a href="/users.html"><span class="nav-icon">👥</span> <span>Kelola Pengguna</span></a>
     </nav>
   </aside>
   <div class="main-wrapper">
     <header class="header">
-      <span class="header-title">Persediaan</span>
+      <span class="header-title">Stok & Gudang</span>
       <div class="header-right">
         <span class="header-user">👤 <span id="currentUser"></span></span>
         <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
       </div>
     </header>
     <main class="content">
-      <div class="page-header">
-        <h1>Manajemen Persediaan</h1>
-        <button class="btn btn-primary" id="btnAdd">+ Tambah Produk</button>
+      <!-- Tabs -->
+      <div class="tabs" style="margin-bottom:20px">
+        <button class="tab-btn active" id="tabProducts" onclick="switchTab('products')">📦 Produk</button>
+        <button class="tab-btn" id="tabStock" onclick="switchTab('stock')">📊 Stok Per Gudang</button>
+        <button class="tab-btn" id="tabWarehouses" onclick="switchTab('warehouses')">🏭 Gudang</button>
+        <button class="tab-btn" id="tabTransfers" onclick="switchTab('transfers')">🔄 Pindah Barang</button>
       </div>
-      <div class="card">
-        <div class="filters">
-          <input class="filter-input" id="filterSearch" placeholder="Cari kode / nama produk...">
-          <input class="filter-input" id="filterCategory" placeholder="Kategori...">
-          <button class="btn btn-outline btn-sm" id="btnSearch">🔍 Cari</button>
+
+      <!-- Tab: Products -->
+      <div id="panelProducts">
+        <div class="page-header">
+          <h1>Manajemen Produk</h1>
+          <div>
+            <button class="btn btn-outline" id="btnSyncStock" title="Sinkronkan stok produk dengan total stok gudang">🔄 Sync Stok</button>
+            <button class="btn btn-primary" id="btnAdd">+ Tambah Produk</button>
+          </div>
         </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Kode</th><th>Nama Produk</th><th>Kategori</th><th>Satuan</th>
-                <th class="text-right">Stok</th><th class="text-right">H. Beli</th>
-                <th class="text-right">H. Jual</th><th class="text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="inventoryTable"></tbody>
-          </table>
+        <div class="card">
+          <div class="filters">
+            <input class="filter-input" id="filterSearch" placeholder="Cari kode / nama produk...">
+            <input class="filter-input" id="filterCategory" placeholder="Kategori...">
+            <button class="btn btn-outline btn-sm" id="btnSearch">🔍 Cari</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kode</th><th>Nama Produk</th><th>Kategori</th><th>Satuan</th>
+                  <th class="text-right">Isi Beli</th><th class="text-right">Isi Jual</th>
+                  <th class="text-right">Jumlah</th><th class="text-right">Harga</th>
+                  <th class="text-right">Total</th><th class="text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTable"></tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="6" style="text-align:right">Grand Total</th>
+                  <th id="grandQty" class="text-right"></th>
+                  <th></th>
+                  <th id="grandTotal" class="text-right"></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
+
+      <!-- Tab: Stock Per Warehouse -->
+      <div id="panelStock" style="display:none">
+        <div class="page-header">
+          <h1>Stok Per Gudang</h1>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select class="form-control" id="filterWarehouse" style="min-width:180px">
+              <option value="">Semua Gudang</option>
+            </select>
+            <input class="filter-input" id="filterProduct" placeholder="Cari produk...">
+            <button class="btn btn-outline btn-sm" id="btnSetStock">📦 Atur Stok Gudang</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Gudang</th>
+                  <th>Kode Produk</th>
+                  <th>Nama Produk</th>
+                  <th>Satuan</th>
+                  <th class="text-right">Stok Gudang</th>
+                  <th class="text-right">Stok Total</th>
+                </tr>
+              </thead>
+              <tbody id="stockTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Warehouses List -->
+      <div id="panelWarehouses" style="display:none">
+        <div class="page-header">
+          <h1>Daftar Gudang</h1>
+          <button class="btn btn-primary" id="btnAddWarehouse">+ Tambah Gudang</button>
+        </div>
+        <div class="card">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama Gudang</th>
+                  <th>Alamat</th>
+                  <th>Telepon</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-right">Total Produk</th>
+                  <th class="text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="warehouseTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Stock Transfers -->
+      <div id="panelTransfers" style="display:none">
+        <div class="page-header">
+          <h1>Pindah Barang</h1>
+          <button class="btn btn-primary" id="btnNewTransfer">+ Buat Transfer</button>
+        </div>
+        <div class="card">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>No. Transfer</th>
+                  <th>Tanggal</th>
+                  <th>Dari Gudang</th>
+                  <th>Ke Gudang</th>
+                  <th class="text-center">Jumlah Item</th>
+                  <th class="text-center">Status</th>
+                  <th>Dibuat Oleh</th>
+                  <th class="text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="transferTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -70,16 +188,62 @@
       <input type="hidden" id="productId">
       <div class="form-row">
         <div class="form-group"><label>Kode Produk *</label><input class="form-control" id="fCode" placeholder="PRD-001"></div>
-        <div class="form-group"><label>Satuan</label><input class="form-control" id="fUnit" placeholder="pcs, kg, dll" value="pcs"></div>
+        <div class="form-group"><label>Kategori</label><input class="form-control" id="fCategory" placeholder="Kategori"></div>
       </div>
       <div class="form-group"><label>Nama Produk *</label><input class="form-control" id="fName" placeholder="Nama produk"></div>
-      <div class="form-row">
-        <div class="form-group"><label>Kategori</label><input class="form-control" id="fCategory" placeholder="Kategori"></div>
-        <div class="form-group"><label>Stok Awal</label><input class="form-control" id="fStock" type="number" min="0" value="0"></div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:12px;margin-bottom:12px">
+        <div style="font-weight:600;font-size:13px;margin-bottom:8px;color:var(--primary)">📦 Satuan & Konversi</div>
+        <div class="form-row">
+          <div class="form-group"><label>Satuan Stok</label>
+            <select class="form-control" id="fUnit">
+              <option value="kg">kg</option>
+              <option value="gram">gram</option>
+              <option value="pcs">pcs</option>
+              <option value="liter">liter</option>
+              <option value="pack">pack</option>
+              <option value="ekor">ekor</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Satuan Beli</label>
+            <select class="form-control" id="fBuyUnit">
+              <option value="kg">kg</option>
+              <option value="gram">gram</option>
+              <option value="pcs">pcs</option>
+              <option value="liter">liter</option>
+              <option value="pack">pack</option>
+              <option value="ekor">ekor</option>
+              <option value="karton">karton</option>
+              <option value="dus">dus</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Satuan Jual</label>
+            <select class="form-control" id="fSellUnit">
+              <option value="pcs">pcs</option>
+              <option value="kg">kg</option>
+              <option value="gram">gram</option>
+              <option value="liter">liter</option>
+              <option value="pack">pack</option>
+              <option value="ekor">ekor</option>
+              <option value="porsi">porsi</option>
+              <option value="bungkus">bungkus</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Isi Beli <span id="labelBuyUnit">(1 kg = ? stok)</span></label><input class="form-control" id="fBuyContent" type="text" inputmode="decimal" value="1" placeholder="0.5"></div>
+          <div class="form-group"><label>Isi Jual <span id="labelSellUnit">(1 pcs = ? stok)</span></label><input class="form-control" id="fSellContent" type="text" inputmode="decimal" value="1" placeholder="0.5"></div>
+        </div>
+        <p style="font-size:11px;color:#999;margin-top:2px" id="contentHint">Contoh: beli 1 kg → stok +1 kg | jual 1 pcs → stok -0.5 kg</p>
       </div>
+      <div class="form-group"><label>Stok <span id="labelStockUnit">(kg)</span></label><input class="form-control" id="fStock" type="number" min="0" step="0.001" value="0"></div>
       <div class="form-row">
         <div class="form-group"><label>Harga Beli</label><input class="form-control" id="fCost" type="number" min="0" value="0"></div>
         <div class="form-group"><label>Harga Jual</label><input class="form-control" id="fSell" type="number" min="0" value="0"></div>
+      </div>
+      <div class="form-group">
+        <label>Gambar Produk</label>
+        <input class="form-control" id="fImage" type="file" accept="image/*">
+        <div id="imagePreview" style="margin-top:8px"></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -111,7 +275,91 @@
   </div>
 </div>
 
+<!-- Warehouse Modal -->
+<div class="modal-overlay" id="warehouseModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="whModalTitle">Tambah Gudang</span>
+      <button class="modal-close" id="whModalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="whId">
+      <div class="form-group"><label>Nama Gudang *</label><input class="form-control" id="whName" placeholder="Gudang Utama"></div>
+      <div class="form-group"><label>Alamat</label><input class="form-control" id="whAddress" placeholder="Alamat gudang"></div>
+      <div class="form-group"><label>Telepon</label><input class="form-control" id="whPhone" placeholder="08xx"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="whModalCancel">Batal</button>
+      <button class="btn btn-primary" id="whModalSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Set Stock Modal -->
+<div class="modal-overlay" id="setStockModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title">Atur Stok Gudang</span>
+      <button class="modal-close" id="ssModalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>Gudang *</label><select class="form-control" id="ssWarehouse"></select></div>
+      <div class="form-group"><label>Produk *</label><select class="form-control" id="ssProduct"></select></div>
+      <div class="form-group"><label>Jumlah Stok</label><input class="form-control" id="ssStock" type="text" inputmode="decimal" value="0" placeholder="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="ssModalCancel">Batal</button>
+      <button class="btn btn-primary" id="ssModalSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Transfer Modal -->
+<div class="modal-overlay" id="transferModal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header">
+      <span class="modal-title">Buat Transfer Stok</span>
+      <button class="modal-close" id="trModalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Tanggal</label><input class="form-control" id="trDate" type="date"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Dari Gudang *</label><select class="form-control" id="trFrom"></select></div>
+        <div class="form-group"><label>Ke Gudang *</label><select class="form-control" id="trTo"></select></div>
+      </div>
+      <div class="form-group"><label>Catatan</label><input class="form-control" id="trNotes" placeholder="Keterangan transfer"></div>
+      <hr style="margin:12px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="font-size:14px">Daftar Barang</strong>
+        <button class="btn btn-outline btn-sm" id="btnAddItem" type="button">+ Tambah Item</button>
+      </div>
+      <div id="transferItems"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="trModalCancel">Batal</button>
+      <button class="btn btn-primary" id="trModalSave">Proses Transfer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Transfer Detail Modal -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <span class="modal-title" id="detailTitle">Detail Transfer</span>
+      <button class="modal-close" id="dtModalClose">&times;</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="dtModalCancel">Tutup</button>
+    </div>
+  </div>
+</div>
+
 <script src="/js/main.js"></script>
 <script src="/js/inventory.js"></script>
+<script src="/js/gudang.js"></script>
 </body>
 </html>

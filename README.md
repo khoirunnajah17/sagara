@@ -1,4 +1,4 @@
-# Sagara Accounting
+# Sagara Meat House
 
 Aplikasi akuntansi berbasis web seperti Accurate Pro, dengan dukungan marketplace **Shopee** dan **Tokopedia**.
 

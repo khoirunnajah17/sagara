@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#1a0a0b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Pembelian – Sagara Meat House</title>
+<title>Hutang – Sagara Meat House</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -21,12 +21,12 @@
       <div class="nav-section">Transaksi</div>
       <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
       <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
-      <a href="/purchases.html" class="active"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
       <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
       <a href="/orders.html"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
       <div class="nav-section">Keuangan</div>
       <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
-      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
+      <a href="/hutang.html" class="active"><span class="nav-icon">📋</span> <span>Hutang</span></a>
       <div class="nav-section">Laporan</div>
       <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
       <div class="nav-section">Pengaturan</div>
@@ -35,7 +35,7 @@
   </aside>
   <div class="main-wrapper">
     <header class="header">
-      <span class="header-title">Pembelian</span>
+      <span class="header-title">Hutang</span>
       <div class="header-right">
         <span class="header-user">👤 <span id="currentUser"></span></span>
         <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
@@ -43,23 +43,33 @@
     </header>
     <main class="content">
       <div class="page-header">
-        <h1>Manajemen Pembelian</h1>
-        <button class="btn btn-primary" id="btnAdd">+ Tambah PO</button>
+        <h1>Manajemen Hutang</h1>
+        <button class="btn btn-primary" id="btnAdd">+ Tambah Hutang</button>
       </div>
+
+      <!-- Summary Cards -->
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+        <div class="stat-card"><div class="stat-icon orange">📋</div><div class="stat-body"><div class="label">Belum Lunas</div><div class="value" id="sumBelumLunas">–</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">💸</div><div class="stat-body"><div class="label">Sisa Hutang</div><div class="value" id="sumSisa">–</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-body"><div class="label">Lunas</div><div class="value" id="sumLunas">–</div></div></div>
+      </div>
+
       <div class="card">
         <div class="filters">
           <select class="filter-select" id="filterStatus">
             <option value="">Semua Status</option>
-            <option value="DRAFT">Draft</option>
-            <option value="ORDERED">Dipesan</option>
-            <option value="RECEIVED">Diterima</option>
-            <option value="CANCELLED">Dibatalkan</option>
+            <option value="BELUM_LUNAS">Belum Lunas</option>
+            <option value="LUNAS">Lunas</option>
           </select>
         </div>
         <div class="table-container">
           <table>
-            <thead><tr><th>No. PO</th><th>Tanggal</th><th>Supplier</th><th class="text-right">Total</th><th>Status</th><th class="text-center">Aksi</th></tr></thead>
-            <tbody id="purchasesTable"></tbody>
+            <thead><tr>
+              <th>Referensi</th><th>Tanggal</th><th>Jatuh Tempo</th><th>Pihak</th>
+              <th class="text-right">Jumlah</th><th class="text-right">Dibayar</th><th class="text-right">Sisa</th>
+              <th>Status</th><th class="text-center">Aksi</th>
+            </tr></thead>
+            <tbody id="hutangTable"></tbody>
           </table>
         </div>
         <div class="pagination" id="pagination"></div>
@@ -68,48 +78,24 @@
   </div>
 </div>
 
-<!-- Add PO Modal -->
-<div class="modal-overlay" id="poModal">
-  <div class="modal modal-lg">
+<!-- Add Hutang Modal -->
+<div class="modal-overlay" id="hutangModal">
+  <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">Tambah Purchase Order</span>
+      <span class="modal-title">Tambah Hutang</span>
       <button class="modal-close" id="modalClose">&times;</button>
     </div>
     <div class="modal-body">
       <div class="form-row">
-        <div class="form-group"><label>No. PO *</label><input class="form-control" id="fPO" placeholder="PO-2024-001"></div>
+        <div class="form-group"><label>Referensi *</label><input class="form-control" id="fRef" placeholder="HT-2024-001"></div>
         <div class="form-group"><label>Tanggal *</label><input class="form-control" id="fDate" type="date"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Nama Supplier *</label><input class="form-control" id="fSupplier" placeholder="Nama supplier"></div>
-        <div class="form-group"><label>Alamat Supplier</label><input class="form-control" id="fSupplierAddress" placeholder="Alamat supplier"></div>
+        <div class="form-group"><label>Jatuh Tempo *</label><input class="form-control" id="fDueDate" type="date"></div>
+        <div class="form-group"><label>Jumlah *</label><input class="form-control" id="fAmount" type="number" min="0" placeholder="0"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Status</label>
-          <select class="form-control" id="fStatus">
-            <option value="DRAFT">Draft</option><option value="ORDERED">Dipesan</option><option value="RECEIVED">Diterima</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Gudang Tujuan</label>
-          <select class="form-control" id="fWarehouse"><option value="">-- Pilih Gudang --</option></select>
-        </div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px">
-        <strong style="font-size:13px">Item Produk</strong>
-        <button class="btn btn-outline btn-sm" type="button" id="btnAddItem">+ Tambah Item</button>
-      </div>
-      <table class="items-table">
-        <thead><tr><th>Produk</th><th>Qty</th><th>Harga Satuan</th><th>Subtotal</th><th>Stok Masuk</th><th></th></tr></thead>
-        <tbody id="itemRows"></tbody>
-      </table>
-      <div style="text-align:right;font-size:15px;font-weight:700;margin-top:10px">
-        Total: <span id="grandTotal">Rp 0</span>
-      </div>
-      <div class="form-group" style="margin-top:10px"><label>Catatan</label><input class="form-control" id="fNotes" placeholder="Opsional"></div>
+      <div class="form-group"><label>Pihak (Kreditur) *</label><input class="form-control" id="fCounterparty" placeholder="Nama supplier / kreditur"></div>
+      <div class="form-group"><label>Keterangan</label><input class="form-control" id="fDesc" placeholder="Opsional"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" id="modalCancel">Batal</button>
@@ -118,18 +104,25 @@
   </div>
 </div>
 
-<!-- Detail Modal -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal modal-lg">
+<!-- Bayar Modal -->
+<div class="modal-overlay" id="bayarModal">
+  <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">Detail Pembelian</span>
-      <button class="modal-close" id="detailClose">&times;</button>
+      <span class="modal-title">Bayar Hutang</span>
+      <button class="modal-close" id="bayarClose">&times;</button>
     </div>
-    <div class="modal-body" id="detailContent"></div>
+    <div class="modal-body">
+      <p id="bayarInfo" style="font-size:13px;margin-bottom:12px"></p>
+      <div class="form-group"><label>Jumlah Bayar *</label><input class="form-control" id="fBayar" type="number" min="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="bayarCancel">Batal</button>
+      <button class="btn btn-primary" id="bayarSave">Bayar</button>
+    </div>
   </div>
 </div>
 
 <script src="/js/main.js"></script>
-<script src="/js/purchases.js"></script>
+<script src="/js/hutang.js"></script>
 </body>
 </html>

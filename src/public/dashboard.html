@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard – Sagara Accounting</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Dashboard – Sagara Meat House</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="layout">
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-logo"><h2>💼 Sagara Accounting</h2><span>Sistem Akuntansi</span></div>
+    <div class="sidebar-logo"><img src="/api/logo" alt="Logo" class="sidebar-logo-img"><h2>Sagara Meat House</h2><span>Sistem Akuntansi</span></div>
     <nav class="sidebar-nav">
       <div class="nav-section">Menu Utama</div>
       <a href="/dashboard.html" class="active"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
@@ -18,10 +21,17 @@
       <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
       <div class="nav-section">Transaksi</div>
       <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
       <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
-      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Persediaan</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
+      <a href="/orders.html"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
+      <div class="nav-section">Keuangan</div>
+      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
       <div class="nav-section">Laporan</div>
       <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+      <div class="nav-section">Pengaturan</div>
+      <a href="/users.html"><span class="nav-icon">👥</span> <span>Kelola Pengguna</span></a>
     </nav>
   </aside>
   <!-- Main -->
@@ -29,12 +39,32 @@
     <header class="header">
       <span class="header-title">Dashboard</span>
       <div class="header-right">
+        <span class="notification-bell" id="orderBell" title="Pesanan Online Masuk" style="margin-right:4px">🛒<span class="notification-badge" id="orderBadge" style="display:none;background:#e65100">0</span></span>
+        <span class="notification-bell" id="notifBell" title="Notifikasi Stok Rendah">🔔<span class="notification-badge" id="notifBadge" style="display:none">0</span></span>
         <span class="header-user">👤 <span id="currentUser"></span></span>
         <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
       </div>
     </header>
     <main class="content">
       <div class="page-header"><h1>Ringkasan Keuangan</h1></div>
+
+      <!-- New order alert -->
+      <div class="order-alert" id="orderAlert" style="display:none">
+        <div class="alert-icon">🛒</div>
+        <div class="alert-body">
+          <div class="alert-title">Pesanan Online Baru!</div>
+          <div class="alert-list" id="orderAlertList"></div>
+        </div>
+      </div>
+
+      <!-- Low stock alert -->
+      <div class="low-stock-alert" id="lowStockAlert" style="display:none">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-body">
+          <div class="alert-title">Peringatan Stok Rendah</div>
+          <div class="alert-list" id="lowStockList"></div>
+        </div>
+      </div>
       <!-- Stat cards -->
       <div class="stats-grid" id="statsGrid">
         <div class="stat-card"><div class="stat-icon blue">💰</div><div class="stat-body"><div class="label">Total Aset</div><div class="value" id="statAsset">–</div></div></div>
@@ -45,7 +75,7 @@
       <!-- Sales channel breakdown -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
         <div class="card">
-          <div class="card-header"><span class="card-title">Penjualan per Channel</span></div>
+          <div class="card-header"><span class="card-title">Ringkasan Penjualan</span></div>
           <div id="channelStats">Memuat...</div>
         </div>
         <div class="card">
@@ -58,6 +88,40 @@
           </div>
         </div>
       </div>
+
+      <!-- Order Management -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+          <span class="card-title">📦 Pesanan Online</span>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-sm btn-warning order-filter-btn active" data-status="">Semua</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="PENDING">Pending</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="CONFIRMED">Dikonfirmasi</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="DONE">Selesai</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="CANCELLED">Batal</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>No. Order</th>
+                <th>Pelanggan</th>
+                <th>Item</th>
+                <th>Catatan</th>
+                <th class="text-right">Total</th>
+                <th>Status</th>
+                <th>Waktu</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTable">
+              <tr><td colspan="8" style="text-align:center;padding:20px;color:#999">Memuat...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>

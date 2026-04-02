@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#1a0a0b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Bagan Akun – Sagara Meat House</title>
+<title>Kas – Sagara Meat House</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
       <div class="nav-section">Menu Utama</div>
       <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
       <div class="nav-section">Akuntansi</div>
-      <a href="/accounts.html" class="active"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
       <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
       <div class="nav-section">Transaksi</div>
       <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
@@ -25,7 +25,7 @@
       <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
       <a href="/orders.html"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
       <div class="nav-section">Keuangan</div>
-      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/kas.html" class="active"><span class="nav-icon">💰</span> <span>Kas</span></a>
       <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
       <div class="nav-section">Laporan</div>
       <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
@@ -35,7 +35,7 @@
   </aside>
   <div class="main-wrapper">
     <header class="header">
-      <span class="header-title">Bagan Akun</span>
+      <span class="header-title">Kas</span>
       <div class="header-right">
         <span class="header-user">👤 <span id="currentUser"></span></span>
         <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
@@ -43,53 +43,64 @@
     </header>
     <main class="content">
       <div class="page-header">
-        <h1>Bagan Akun (Chart of Accounts)</h1>
-        <button class="btn btn-primary" id="btnAdd">+ Tambah Akun</button>
+        <h1>Buku Kas</h1>
+        <button class="btn btn-primary" id="btnAdd">+ Tambah Transaksi</button>
       </div>
+
+      <!-- Summary Cards -->
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+        <div class="stat-card"><div class="stat-icon green">📥</div><div class="stat-body"><div class="label">Kas Masuk</div><div class="value" id="sumMasuk">–</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">📤</div><div class="stat-body"><div class="label">Kas Keluar</div><div class="value" id="sumKeluar">–</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue">💰</div><div class="stat-body"><div class="label">Saldo</div><div class="value" id="sumSaldo">–</div></div></div>
+      </div>
+
       <div class="card">
         <div class="filters">
           <select class="filter-select" id="filterType">
             <option value="">Semua Tipe</option>
-            <option value="ASSET">Aset</option>
-            <option value="LIABILITY">Kewajiban</option>
-            <option value="EQUITY">Ekuitas</option>
-            <option value="REVENUE">Pendapatan</option>
-            <option value="EXPENSE">Beban</option>
+            <option value="MASUK">Kas Masuk</option>
+            <option value="KELUAR">Kas Keluar</option>
           </select>
         </div>
         <div class="table-container">
           <table>
-            <thead><tr><th>Kode</th><th>Nama Akun</th><th>Tipe</th><th class="text-right">Saldo</th><th class="text-center">Aksi</th></tr></thead>
-            <tbody id="accountsTable"></tbody>
+            <thead><tr>
+              <th>Referensi</th><th>Tanggal</th><th>Tipe</th><th>Pihak</th>
+              <th>Keterangan</th><th class="text-right">Jumlah</th><th class="text-center">Aksi</th>
+            </tr></thead>
+            <tbody id="kasTable"></tbody>
           </table>
         </div>
+        <div class="pagination" id="pagination"></div>
       </div>
     </main>
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="accountModal">
+<!-- Add Kas Modal -->
+<div class="modal-overlay" id="kasModal">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title" id="modalTitle">Tambah Akun</span>
+      <span class="modal-title">Tambah Transaksi Kas</span>
       <button class="modal-close" id="modalClose">&times;</button>
     </div>
     <div class="modal-body">
-      <input type="hidden" id="accountId">
       <div class="form-row">
-        <div class="form-group"><label>Kode Akun *</label><input class="form-control" id="fCode" placeholder="Cth: 1-1001"></div>
+        <div class="form-group"><label>Referensi *</label><input class="form-control" id="fRef" placeholder="KAS-2024-001"></div>
+        <div class="form-group"><label>Tanggal *</label><input class="form-control" id="fDate" type="date"></div>
+      </div>
+      <div class="form-row">
         <div class="form-group">
           <label>Tipe *</label>
           <select class="form-control" id="fType">
-            <option value="ASSET">Aset</option><option value="LIABILITY">Kewajiban</option>
-            <option value="EQUITY">Ekuitas</option><option value="REVENUE">Pendapatan</option>
-            <option value="EXPENSE">Beban</option>
+            <option value="MASUK">Kas Masuk</option>
+            <option value="KELUAR">Kas Keluar</option>
           </select>
         </div>
+        <div class="form-group"><label>Jumlah *</label><input class="form-control" id="fAmount" type="number" min="0" placeholder="0"></div>
       </div>
-      <div class="form-group"><label>Nama Akun *</label><input class="form-control" id="fName" placeholder="Nama akun"></div>
-      <div class="form-group"><label>Saldo Awal</label><input class="form-control" id="fBalance" type="number" min="0" value="0"></div>
+      <div class="form-group"><label>Pihak *</label><input class="form-control" id="fCounterparty" placeholder="Nama pihak terkait"></div>
+      <div class="form-group"><label>Keterangan</label><input class="form-control" id="fDesc" placeholder="Opsional"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" id="modalCancel">Batal</button>
@@ -99,6 +110,6 @@
 </div>
 
 <script src="/js/main.js"></script>
-<script src="/js/accounts.js"></script>
+<script src="/js/kas.js"></script>
 </body>
 </html>

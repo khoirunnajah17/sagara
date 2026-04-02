@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Pesanan Online – Sagara Meat House</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo"><img src="/api/logo" alt="Logo" class="sidebar-logo-img"><h2>Sagara Meat House</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
+      <a href="/orders.html" class="active"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
+      <div class="nav-section">Keuangan</div>
+      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+      <div class="nav-section">Pengaturan</div>
+      <a href="/users.html"><span class="nav-icon">👥</span> <span>Kelola Pengguna</span></a>
+    </nav>
+  </aside>
+  <!-- Main -->
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Pesanan Online</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="page-header"><h1>Kelola Pesanan Online</h1></div>
+
+      <!-- Stat cards -->
+      <div class="stats-grid" id="orderStats">
+        <div class="stat-card"><div class="stat-icon" style="background:#fff3e0;color:#e65100">⏳</div><div class="stat-body"><div class="label">Menunggu</div><div class="value" id="statPending">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#e3f2fd;color:#1565c0">✓</div><div class="stat-body"><div class="label">Dikonfirmasi</div><div class="value" id="statConfirmed">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#e8f5e9;color:#2e7d32">✅</div><div class="stat-body"><div class="label">Selesai</div><div class="value" id="statDone">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#fce4ec;color:#c62828">✗</div><div class="stat-body"><div class="label">Dibatalkan</div><div class="value" id="statCancelled">0</div></div></div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-sm btn-warning order-filter-btn active" data-status="">Semua</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="PENDING">Menunggu</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="CONFIRMED">Dikonfirmasi</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="DONE">Selesai</button>
+            <button class="btn btn-sm btn-outline order-filter-btn" data-status="CANCELLED">Dibatalkan</button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input type="text" id="searchInput" class="form-control" placeholder="Cari no. order / pelanggan..." style="width:220px;height:34px;font-size:13px">
+            <input type="date" id="dateFrom" class="form-control" style="width:140px;height:34px;font-size:13px">
+            <span style="color:#999;font-size:13px">s/d</span>
+            <input type="date" id="dateTo" class="form-control" style="width:140px;height:34px;font-size:13px">
+            <button class="btn btn-sm btn-primary" id="btnExport">📥 Export CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders table -->
+      <div class="card">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>No. Order</th>
+                <th>Pelanggan</th>
+                <th>Item Pesanan</th>
+                <th>Catatan</th>
+                <th class="text-right">Total</th>
+                <th>Status</th>
+                <th>Waktu</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTable">
+              <tr><td colspan="8" style="text-align:center;padding:20px;color:#999">Memuat...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="detailModal" style="display:none">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h3 id="detailTitle">Detail Pesanan</h3>
+      <button class="modal-close" onclick="closeDetail()">&times;</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-footer" id="detailFooter"></div>
+  </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/orders-page.js"></script>
+</body>
+</html>

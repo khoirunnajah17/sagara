@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Login – Sagara Accounting</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Login – Sagara Meat House</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="login-page">
   <div class="login-card">
     <div class="login-logo">
-      <h1>💼 Sagara</h1>
-      <p>Sistem Akuntansi Bisnis Anda</p>
+      <img src="/api/logo" alt="Logo" class="login-logo-img">
+      <h1>Sagara Meat House</h1>
+      <p>Masuk ke akun Anda</p>
     </div>
     <form id="loginForm">
       <div class="form-group">
-        <label for="username">Username</label>
-        <input class="form-control" id="username" type="text" placeholder="Masukkan username" required autocomplete="username">
+        <label for="identifier">Username atau No. HP</label>
+        <input class="form-control" id="identifier" type="text" placeholder="Masukkan username atau no. HP" required autocomplete="username">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
@@ -24,8 +28,11 @@
       <p id="errMsg" style="color:#e53935;font-size:13px;margin-bottom:10px;display:none"></p>
       <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px" type="submit">Masuk</button>
     </form>
-    <p style="text-align:center;margin-top:16px;font-size:12px;color:#757575">
-      Default: <strong>admin</strong> / <strong>Admin@1234</strong>
+    <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)">
+      Belum punya akun? <a href="/register.html" style="color:var(--primary);font-weight:600">Daftar sebagai pelanggan</a>
+    </p>
+    <p style="text-align:center;margin-top:8px;font-size:11px;color:#999">
+      <a href="/" style="color:#999;text-decoration:none">← Kembali ke Beranda</a>
     </p>
   </div>
 </div>
@@ -34,7 +41,10 @@
     try {
         const r = await fetch('/api/auth/me', { credentials: 'include' });
         const d = await r.json();
-        if (d.success) window.location.href = '/dashboard.html';
+        if (d.success) {
+            if (d.type === 'customer') window.location.href = '/';
+            else window.location.href = '/dashboard.html';
+        }
     } catch {}
 })();
 
@@ -42,16 +52,21 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
     e.preventDefault();
     const errMsg = document.getElementById('errMsg');
     errMsg.style.display = 'none';
-    const body = { username: document.getElementById('username').value, password: document.getElementById('password').value };
+    const body = { identifier: document.getElementById('identifier').value.trim(), password: document.getElementById('password').value };
     try {
-        const res  = await fetch('/api/auth/login', {
+        const res = await fetch('/api/auth/login', {
             method: 'POST', credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         });
         const data = await res.json();
-        if (data.success) { window.location.href = '/dashboard.html'; }
-        else { errMsg.textContent = data.message; errMsg.style.display = 'block'; }
+        if (data.success) {
+            if (data.type === 'customer') window.location.href = '/';
+            else window.location.href = '/dashboard.html';
+        } else {
+            errMsg.textContent = data.message;
+            errMsg.style.display = 'block';
+        }
     } catch {
         errMsg.textContent = 'Tidak dapat terhubung ke server.';
         errMsg.style.display = 'block';

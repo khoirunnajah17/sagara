@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Kelola Pengguna – Sagara Meat House</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .access-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .access-table th, .access-table td { padding:8px 10px; border-bottom:1px solid var(--border); }
+  .access-table th { background:#f5f7fa; text-align:left; font-size:12px; text-transform:uppercase; color:var(--text-muted); }
+  .access-table input[type=checkbox] { width:18px; height:18px; cursor:pointer; }
+  .role-tabs { display:flex; gap:8px; margin-bottom:16px; }
+  .role-tab { padding:8px 20px; border:1px solid var(--border); border-radius:6px; background:#fff; cursor:pointer; font-size:13px; font-weight:500; }
+  .role-tab.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><img src="/api/logo" alt="Logo" class="sidebar-logo-img"><h2>Sagara Meat House</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
+      <a href="/orders.html"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
+      <div class="nav-section">Keuangan</div>
+      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+      <div class="nav-section">Pengaturan</div>
+      <a href="/users.html" class="active"><span class="nav-icon">👥</span> <span>Kelola Pengguna</span></a>
+    </nav>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Kelola Pengguna</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <!-- Users Section -->
+      <div class="page-header">
+        <h1>Manajemen Pengguna</h1>
+        <button class="btn btn-primary" id="btnAdd">+ Tambah Pengguna</button>
+      </div>
+      <div class="card" style="margin-bottom:24px">
+        <div class="table-container">
+          <table>
+            <thead><tr>
+              <th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Status</th><th>Terdaftar</th><th class="text-center">Aksi</th>
+            </tr></thead>
+            <tbody id="usersTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Role Access Section -->
+      <div class="page-header"><h1>Pengaturan Akses Role</h1></div>
+      <div class="card">
+        <div class="role-tabs" id="roleTabs">
+          <button class="role-tab active" data-role="admin">Admin</button>
+          <button class="role-tab" data-role="user">User</button>
+        </div>
+        <div class="table-container">
+          <table class="access-table">
+            <thead><tr><th>Menu</th><th>Lihat</th><th>Tambah</th><th>Edit</th><th>Hapus</th></tr></thead>
+            <tbody id="accessTable"></tbody>
+          </table>
+        </div>
+        <div style="text-align:right;margin-top:12px">
+          <button class="btn btn-primary" id="btnSaveAccess">💾 Simpan Akses</button>
+        </div>
+      </div>
+
+      <!-- Customer Verification Section -->
+      <div class="page-header" style="margin-top:32px">
+        <h1>Verifikasi Pelanggan</h1>
+        <span class="badge badge-warning" id="pendingBadge" style="display:none;font-size:13px;padding:6px 14px">0 menunggu</span>
+      </div>
+      <div class="card">
+        <div class="table-container">
+          <table>
+            <thead><tr>
+              <th>ID</th><th>Nama</th><th>No. HP</th><th>Email</th><th>Status</th><th>Terdaftar</th><th class="text-center">Aksi</th>
+            </tr></thead>
+            <tbody id="customersTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Logo Settings Section -->
+      <div class="page-header" style="margin-top:32px">
+        <h1>🎨 Pengaturan Logo</h1>
+      </div>
+      <div class="card" style="padding:24px">
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="text-align:center">
+            <img id="currentLogo" src="/api/logo" alt="Logo" style="width:100px;height:100px;object-fit:contain;border-radius:12px;border:2px solid var(--border);padding:8px;background:#fff">
+            <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Logo saat ini</p>
+          </div>
+          <div style="flex:1;min-width:250px">
+            <p style="font-size:13px;color:var(--text);margin-bottom:12px">Upload logo baru (PNG, JPG, atau WebP, maks 5MB):</p>
+            <input type="file" id="logoFile" accept="image/*" class="form-control" style="margin-bottom:12px">
+            <button class="btn btn-primary" onclick="uploadLogo()">📤 Upload Logo</button>
+            <p id="logoMsg" style="font-size:12px;margin-top:8px;display:none"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- User Modal -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Tambah Pengguna</span>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="userId">
+      <div class="form-row">
+        <div class="form-group"><label>Username *</label><input class="form-control" id="fUsername" placeholder="Username" autocomplete="off"></div>
+        <div class="form-group"><label>Email *</label><input class="form-control" id="fEmail" type="email" placeholder="email@example.com" autocomplete="off"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label id="lblPassword">Password *</label><input class="form-control" id="fPassword" type="password" placeholder="Minimal 6 karakter" autocomplete="new-password"></div>
+        <div class="form-group">
+          <label>Role *</label>
+          <select class="form-control" id="fRole">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" id="activeGroup" style="display:none">
+        <label><input type="checkbox" id="fActive" checked> Akun Aktif</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="modalCancel">Batal</button>
+      <button class="btn btn-primary" id="modalSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Per-User Access Modal -->
+<div class="modal-overlay" id="accessModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title">Pengaturan Akses: <strong id="accessUserName"></strong></span>
+      <button class="modal-close" id="accessClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Atur hak akses menu untuk pengguna ini secara individual.</p>
+      <table class="access-table">
+        <thead><tr><th>Menu</th><th>Lihat</th><th>Tambah</th><th>Edit</th><th>Hapus</th></tr></thead>
+        <tbody id="userAccessTable"></tbody>
+      </table>
+      <input type="hidden" id="accessUserId">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="accessReset">🔄 Reset ke Default Role</button>
+      <button class="btn btn-primary" id="accessSave">💾 Simpan Akses</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/users.js"></script>
+</body>
+</html>

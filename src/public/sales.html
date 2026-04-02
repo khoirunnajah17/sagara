@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Penjualan – Sagara Accounting</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Penjualan – Sagara Meat House</title>
 <link rel="stylesheet" href="/css/style.css">
-<style>
-  .shopee-header   { background:#fff0ec; color:#ee4d2d; border-left:4px solid #ee4d2d; padding:12px 16px; border-radius:8px; margin-bottom:16px; font-weight:700; display:none; }
-  .tokopedia-header{ background:#e8fff4; color:#00aa5b; border-left:4px solid #00aa5b; padding:12px 16px; border-radius:8px; margin-bottom:16px; font-weight:700; display:none; }
-  .channel-active  { display:flex !important; align-items:center; gap:10px; }
-</style>
+
 </head>
 <body>
 <div class="layout">
   <aside class="sidebar">
-    <div class="sidebar-logo"><h2>💼 Sagara Accounting</h2><span>Sistem Akuntansi</span></div>
+    <div class="sidebar-logo"><img src="/api/logo" alt="Logo" class="sidebar-logo-img"><h2>Sagara Meat House</h2><span>Sistem Akuntansi</span></div>
     <nav class="sidebar-nav">
       <div class="nav-section">Menu Utama</div>
       <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
@@ -22,10 +21,17 @@
       <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
       <div class="nav-section">Transaksi</div>
       <a href="/sales.html" class="active"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
       <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
-      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Persediaan</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
+      <a href="/orders.html"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
+      <div class="nav-section">Keuangan</div>
+      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
       <div class="nav-section">Laporan</div>
       <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+      <div class="nav-section">Pengaturan</div>
+      <a href="/users.html"><span class="nav-icon">👥</span> <span>Kelola Pengguna</span></a>
     </nav>
   </aside>
   <div class="main-wrapper">
@@ -43,25 +49,11 @@
       </div>
 
       <!-- Summary Cards -->
-      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
-        <div class="stat-card"><div class="stat-icon blue">🛒</div><div class="stat-body"><div class="label">Semua Penjualan</div><div class="value" id="sumAll">–</div></div></div>
-        <div class="stat-card"><div class="stat-icon blue">📍</div><div class="stat-body"><div class="label">Langsung</div><div class="value" id="sumDirect">–</div></div></div>
-        <div class="stat-card"><div class="stat-icon shopee">🛍</div><div class="stat-body"><div class="label">Shopee</div><div class="value" id="sumShopee">–</div></div></div>
-        <div class="stat-card"><div class="stat-icon tokopedia">🟢</div><div class="stat-body"><div class="label">Tokopedia</div><div class="value" id="sumTokopedia">–</div></div></div>
+      <div class="stats-grid" style="grid-template-columns:repeat(1,1fr);margin-bottom:20px">
+        <div class="stat-card"><div class="stat-icon blue">🛒</div><div class="stat-body"><div class="label">Total Penjualan</div><div class="value" id="sumAll">–</div></div></div>
       </div>
 
-      <!-- Shopee / Tokopedia channel headers (shown when tab active) -->
-      <div class="shopee-header" id="shopeeHeader">🛍 Shopee – Kelola pesanan dari platform Shopee</div>
-      <div class="tokopedia-header" id="tokopediaHeader">🟢 Tokopedia – Kelola pesanan dari platform Tokopedia</div>
-
       <div class="card">
-        <!-- Tabs -->
-        <div class="tabs">
-          <button class="tab-btn active"         data-channel="ALL"       >Semua</button>
-          <button class="tab-btn"                data-channel="DIRECT"    >Langsung</button>
-          <button class="tab-btn shopee-tab"     data-channel="SHOPEE"    >🛍 Shopee</button>
-          <button class="tab-btn tokopedia-tab"  data-channel="TOKOPEDIA" >🟢 Tokopedia</button>
-        </div>
         <div class="filters">
           <select class="filter-select" id="filterStatus">
             <option value="">Semua Status</option>
@@ -79,7 +71,6 @@
             <thead>
               <tr>
                 <th>No. Invoice</th><th>Tanggal</th><th>Pelanggan</th>
-                <th>Channel</th><th>Platform Order ID</th>
                 <th class="text-right">Total</th><th>Status</th><th class="text-center">Aksi</th>
               </tr>
             </thead>
@@ -106,18 +97,7 @@
       </div>
       <div class="form-row">
         <div class="form-group"><label>Nama Pelanggan *</label><input class="form-control" id="fCustomer" placeholder="Nama pelanggan"></div>
-        <div class="form-group">
-          <label>Channel *</label>
-          <select class="form-control" id="fChannel" onchange="togglePlatformId()">
-            <option value="DIRECT">Langsung</option>
-            <option value="SHOPEE">Shopee</option>
-            <option value="TOKOPEDIA">Tokopedia</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group" id="platformGroup" style="display:none">
-        <label>Platform Order ID</label>
-        <input class="form-control" id="fPlatformId" placeholder="ID pesanan dari marketplace">
+        <div class="form-group"><label>Alamat Pelanggan</label><input class="form-control" id="fCustomerAddress" placeholder="Alamat pengiriman"></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px">
         <strong style="font-size:13px">Item Produk</strong>
@@ -141,6 +121,10 @@
             <option value="DRAFT">Draft</option><option value="CONFIRMED">Dikonfirmasi</option>
             <option value="SHIPPED">Dikirim</option><option value="DONE">Selesai</option>
           </select>
+        </div>
+        <div class="form-group">
+          <label>Gudang</label>
+          <select class="form-control" id="fWarehouse"><option value="">-- Pilih Gudang --</option></select>
         </div>
         <div class="form-group"><label>Catatan</label><input class="form-control" id="fNotes" placeholder="Opsional"></div>
       </div>
