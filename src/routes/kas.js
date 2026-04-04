@@ -158,6 +158,46 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
+// POST fix sales kas entries that were incorrectly saved as KELUAR
+router.post('/fix-sales-type', auth, async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+        await conn.beginTransaction();
+        // Find kas entries for sales (description contains "Penjualan") that are wrongly KELUAR
+        const [wrong] = await conn.query(
+            `SELECT id, reference, description, amount FROM kas 
+             WHERE type = 'KELUAR' AND (description LIKE '%Penjualan%' OR reference LIKE 'TG-%' OR reference LIKE 'INV-%')`
+        );
+        if (!wrong.length) {
+            await conn.rollback();
+            return res.json({ success: true, message: 'Tidak ada data yang perlu diperbaiki.', fixed: 0 });
+        }
+        for (const k of wrong) {
+            // Fix kas type
+            await conn.query('UPDATE kas SET type = ? WHERE id = ?', ['MASUK', k.id]);
+            // Fix journal: reverse old entries and recreate
+            await deleteKasJournal(conn, k.reference);
+            await createKasJournal(conn, {
+                date: new Date().toISOString().slice(0, 10),
+                description: k.description,
+                reference: k.reference,
+                amount: parseFloat(k.amount),
+                type: 'MASUK',
+                userId: req.session.user.id,
+                isSale: true
+            });
+        }
+        await conn.commit();
+        res.json({ success: true, message: `Berhasil memperbaiki ${wrong.length} transaksi kas.`, fixed: wrong.length, data: wrong });
+    } catch (err) {
+        await conn.rollback();
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Gagal memperbaiki data kas: ' + err.message });
+    } finally {
+        conn.release();
+    }
+});
+
 module.exports = router;
 module.exports.createKasJournal = createKasJournal;
 module.exports.deleteKasJournal = deleteKasJournal;
