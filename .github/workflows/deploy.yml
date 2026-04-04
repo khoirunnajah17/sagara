@@ -1,0 +1,53 @@
+name: Deploy to Jagoan Hosting
+
+on:
+  push:
+    branches:
+      - main
+
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.JAGOAN_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.JAGOAN_SSH_PORT || '22' }} -H "${{ secrets.JAGOAN_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        env:
+          JAGOAN_HOST: ${{ secrets.JAGOAN_HOST }}
+          JAGOAN_USER: ${{ secrets.JAGOAN_USER }}
+          JAGOAN_PORT: ${{ secrets.JAGOAN_SSH_PORT || '22' }}
+          APP_DIR: ${{ secrets.JAGOAN_APP_DIR }}
+        run: |
+          ssh -p "$JAGOAN_PORT" "$JAGOAN_USER@$JAGOAN_HOST" \
+            APP_DIR="$APP_DIR" bash -s << 'ENDSSH'
+            set -e
+            cd "$APP_DIR"
+
+            echo "→ Pulling latest code..."
+            git pull origin main
+
+            echo "→ Installing production dependencies..."
+            npm ci --omit=dev
+
+            echo "→ Reloading app with PM2..."
+            pm2 reload ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
+
+            echo "→ Saving PM2 process list..."
+            pm2 save
+
+            echo "✅ Deploy selesai!"
+          ENDSSH

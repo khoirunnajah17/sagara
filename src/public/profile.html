@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Profil – Sagara Meat House</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><img src="/api/logo" alt="Logo" class="sidebar-logo-img"><h2>Sagara Meat House</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
+      <div class="nav-section">Keuangan</div>
+      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+      <div class="nav-section">Pengaturan</div>
+      <a href="/users.html"><span class="nav-icon">👥</span> <span>Kelola Pengguna</span></a>
+    </nav>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Profil Saya</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="page-header"><h1>Profil Pengguna</h1></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:860px">
+        <!-- Profile Info -->
+        <div class="card profile-card">
+          <div class="profile-avatar" id="profileAvatar">?</div>
+          <h3 style="text-align:center;margin-bottom:4px" id="profileName">-</h3>
+          <p style="text-align:center;color:var(--text-muted);font-size:13px;margin-bottom:20px" id="profileRole">-</p>
+          <div class="form-group">
+            <label>Username</label>
+            <input class="form-control" id="pUsername" readonly>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input class="form-control" id="pEmail" type="email">
+          </div>
+          <button class="btn btn-primary" id="btnSaveProfile" style="width:100%;justify-content:center">Simpan Profil</button>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card profile-card">
+          <h3 style="margin-bottom:16px">🔒 Ubah Password</h3>
+          <div class="form-group">
+            <label>Password Lama</label>
+            <input class="form-control" id="pOldPass" type="password" placeholder="Masukkan password lama">
+          </div>
+          <div class="form-group">
+            <label>Password Baru</label>
+            <input class="form-control" id="pNewPass" type="password" placeholder="Minimal 6 karakter">
+          </div>
+          <div class="form-group">
+            <label>Konfirmasi Password Baru</label>
+            <input class="form-control" id="pConfirmPass" type="password" placeholder="Ulangi password baru">
+          </div>
+          <button class="btn btn-warning" id="btnChangePass" style="width:100%;justify-content:center">Ubah Password</button>
+        </div>
+      </div>
+
+      <!-- Nota Design Upload -->
+      <div style="max-width:860px;margin-top:20px">
+        <div class="card">
+          <h3 style="margin-bottom:16px">🖨️ Desain Nota / Kop Nota</h3>
+          <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Upload gambar header/kop yang akan ditampilkan di bagian atas nota cetak (penjualan & pembelian). Format: JPG, PNG, WEBP. Maks 5MB. Rekomendasi ukuran: 800 x 200 piksel.</p>
+          <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+            <!-- Preview -->
+            <div id="notaPreviewBox" style="flex:1;min-width:300px;border:2px dashed var(--border);border-radius:8px;padding:16px;text-align:center;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa">
+              <span id="notaPlaceholder" style="color:var(--text-muted)">Belum ada desain nota</span>
+              <img id="notaPreviewImg" src="" alt="Nota Header" style="max-width:100%;max-height:200px;display:none;border-radius:4px">
+            </div>
+            <!-- Controls -->
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:200px">
+              <label class="btn btn-primary" style="cursor:pointer;justify-content:center">
+                📁 Pilih Gambar
+                <input type="file" id="notaFileInput" accept="image/jpeg,image/png,image/webp" style="display:none">
+              </label>
+              <button class="btn btn-success" id="btnUploadNota" style="justify-content:center" disabled>⬆️ Upload Nota</button>
+              <button class="btn btn-danger btn-sm" id="btnDeleteNota" style="justify-content:center;display:none">🗑️ Hapus Desain</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="/js/main.js"></script>
+<script src="/js/profile.js"></script>
+</body>
+</html>

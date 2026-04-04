@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Laporan Keuangan – Sagara Meat House</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><img src="/api/logo" alt="Logo" class="sidebar-logo-img"><h2>Sagara Meat House</h2><span>Sistem Akuntansi</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu Utama</div>
+      <a href="/dashboard.html"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+      <div class="nav-section">Akuntansi</div>
+      <a href="/accounts.html"><span class="nav-icon">📒</span> <span>Bagan Akun</span></a>
+      <a href="/journal.html"><span class="nav-icon">📝</span> <span>Jurnal Umum</span></a>
+      <div class="nav-section">Transaksi</div>
+      <a href="/sales.html"><span class="nav-icon">🛒</span> <span>Penjualan</span></a>
+      <a href="/kasir.html"><span class="nav-icon">🧾</span> <span>Mode Kasir</span></a>
+      <a href="/purchases.html"><span class="nav-icon">📦</span> <span>Pembelian</span></a>
+      <a href="/inventory.html"><span class="nav-icon">🏪</span> <span>Stok &amp; Gudang</span></a>
+      <a href="/orders.html"><span class="nav-icon">📱</span> <span>Pesanan Online</span></a>
+      <div class="nav-section">Keuangan</div>
+      <a href="/kas.html"><span class="nav-icon">💰</span> <span>Kas</span></a>
+      <a href="/hutang.html"><span class="nav-icon">📋</span> <span>Hutang</span></a>
+      <div class="nav-section">Laporan</div>
+      <a href="/reports.html" class="active"><span class="nav-icon">📈</span> <span>Laporan Keuangan</span></a>
+      <div class="nav-section">Pengaturan</div>
+      <a href="/users.html"><span class="nav-icon">👥</span> <span>Kelola Pengguna</span></a>
+    </nav>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <span class="header-title">Laporan Keuangan</span>
+      <div class="header-right">
+        <span class="header-user">👤 <span id="currentUser"></span></span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="page-header"><h1>Laporan Keuangan</h1></div>
+      <!-- Report Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-report="balance-sheet">Neraca</button>
+        <button class="tab-btn" data-report="income-statement">Laba Rugi</button>
+        <button class="tab-btn" data-report="trial-balance">Neraca Saldo</button>
+        <button class="tab-btn" data-report="monthly">📆 Bulanan</button>
+        <button class="tab-btn" data-report="sales-report">📊 Penjualan</button>
+        <button class="tab-btn" data-report="sales-per-user">👤 Per User</button>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-success btn-sm" id="btnExportCsv">📥 Export CSV</button>
+          <button class="btn btn-outline btn-sm" id="btnPrint">🖨️ Print</button>
+        </div>
+      </div>
+
+      <!-- Date filter for reports that need it -->
+      <div id="dateFilter" style="display:none;margin-bottom:16px" class="filters">
+        <label style="font-size:13px;font-weight:600">Dari:</label>
+        <input class="filter-input" id="filterFrom" type="date">
+        <label style="font-size:13px;font-weight:600">Sampai:</label>
+        <input class="filter-input" id="filterTo" type="date">
+        <button class="btn btn-primary btn-sm" id="btnFilter">Tampilkan</button>
+      </div>
+
+      <!-- Year filter for monthly report -->
+      <div id="yearFilter" style="display:none;margin-bottom:16px" class="filters">
+        <label style="font-size:13px;font-weight:600">Tahun:</label>
+        <select class="filter-input" id="filterYear" style="max-width:120px"></select>
+        <button class="btn btn-primary btn-sm" id="btnFilterYear">Tampilkan</button>
+      </div>
+
+      <div id="reportContent">
+        <div style="text-align:center;padding:40px;color:#757575">Memuat laporan...</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/js/main.js"></script>
+<script src="/js/reports.js"></script>
+</body>
+</html>

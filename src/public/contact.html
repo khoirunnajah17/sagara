@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hubungi Kami – Sagara Meat House</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="catalog-page">
+
+<!-- Navbar -->
+<nav class="catalog-nav">
+  <div class="catalog-container catalog-nav-inner">
+    <a href="/" class="catalog-brand"><img src="/api/logo" alt="Logo" class="nav-logo-img"> Sagara Meat House</a>
+    <div class="catalog-nav-links">
+      <a href="/" class="nav-link">Beranda</a>
+      <a href="/contact.html" class="nav-link active">Hubungi Kami</a>
+    </div>
+    <div class="catalog-nav-right">
+      <a href="/index.html" class="btn btn-outline btn-nav-login">Masuk</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="catalog-hero" style="padding:40px 0">
+  <div class="catalog-container" style="text-align:center">
+    <h1>Hubungi <span class="hero-highlight">Kami</span></h1>
+    <p>Ada pertanyaan atau saran? Jangan ragu menghubungi kami</p>
+  </div>
+</section>
+
+<!-- Contact Content -->
+<main class="catalog-container" style="padding:40px 20px;max-width:900px">
+  <div class="contact-grid">
+
+    <!-- Contact Info Cards -->
+    <div class="contact-info">
+      <div class="contact-card">
+        <div class="contact-card-icon">📍</div>
+        <h3>Alamat</h3>
+        <p>Perumahan Center Park Residence<br>Mayana 6 No 8, Alang-Alang Lebar<br>Palembang, Sumatera Selatan</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">📞</div>
+        <h3>Telepon</h3>
+        <p><a href="tel:+6281196998881">0811-9699-8881</a></p>
+        <p style="font-size:12px;color:var(--text-muted)">Senin - Sabtu, 08:00 - 17:00 WIB</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">✉️</div>
+        <h3>Email</h3>
+        <p><a href="mailto:info@sagarastore.com">info@sagarastore.com</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">💬</div>
+        <h3>WhatsApp</h3>
+        <p><a href="https://wa.link/bs5z84" target="_blank" rel="noopener">0811-9699-8881</a></p>
+        <p style="font-size:12px;color:var(--text-muted)">Chat langsung dengan kami</p>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form-wrapper">
+      <h2 style="margin-bottom:8px">Kirim Pesan</h2>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px">Isi formulir di bawah dan kami akan segera merespons</p>
+      <form id="contactForm" onsubmit="return submitContact(event)">
+        <div class="form-group">
+          <label>Nama Lengkap *</label>
+          <input class="form-control" id="contactName" placeholder="Nama Anda" required>
+        </div>
+        <div class="form-group">
+          <label>No. HP / WhatsApp *</label>
+          <input class="form-control" id="contactPhone" type="tel" placeholder="08xxxxxxxxxx" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-control" id="contactEmail" type="email" placeholder="email@contoh.com (opsional)">
+        </div>
+        <div class="form-group">
+          <label>Subjek *</label>
+          <select class="form-control" id="contactSubject" required>
+            <option value="">-- Pilih Subjek --</option>
+            <option value="pertanyaan">Pertanyaan Umum</option>
+            <option value="pesanan">Pertanyaan Pesanan</option>
+            <option value="komplain">Komplain / Keluhan</option>
+            <option value="kerjasama">Kerjasama / B2B</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Pesan *</label>
+          <textarea class="form-control" id="contactMessage" rows="5" placeholder="Tulis pesan Anda di sini..." required></textarea>
+        </div>
+        <p id="contactError" style="color:#e53935;font-size:12px;display:none;margin-bottom:8px"></p>
+        <p id="contactSuccess" style="color:#43a047;font-size:13px;display:none;margin-bottom:8px"></p>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px">📩 Kirim Pesan</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Map Section -->
+  <div class="contact-map-section">
+    <h2 style="text-align:center;margin-bottom:20px">📍 Lokasi Kami</h2>
+    <div class="contact-map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.4!2d104.7!3d-2.95!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b7!2sAlang-Alang%20Lebar%2C%20Palembang!5e0!3m2!1sen!2sid!4v1648000000000!5m2!1sen!2sid"
+        width="100%" height="350" style="border:0;border-radius:12px" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="catalog-footer">
+  <div class="catalog-container">
+    <p>&copy; 2026 Sagara Meat House. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+function submitContact(e) {
+  e.preventDefault();
+  const name = document.getElementById('contactName').value.trim();
+  const phone = document.getElementById('contactPhone').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const subject = document.getElementById('contactSubject').value;
+  const message = document.getElementById('contactMessage').value.trim();
+  const errEl = document.getElementById('contactError');
+  const successEl = document.getElementById('contactSuccess');
+  errEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  if (!name || !phone || !subject || !message) {
+    errEl.textContent = 'Harap isi semua field yang wajib (*)';
+    errEl.style.display = 'block';
+    return false;
+  }
+
+  // Send via API
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, phone, email, subject, message })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.success) {
+      successEl.textContent = '✅ Pesan berhasil dikirim! Kami akan segera menghubungi Anda.';
+      successEl.style.display = 'block';
+      document.getElementById('contactForm').reset();
+    } else {
+      errEl.textContent = d.message || 'Gagal mengirim pesan';
+      errEl.style.display = 'block';
+    }
+  })
+  .catch(() => {
+    errEl.textContent = 'Terjadi kesalahan, coba lagi nanti';
+    errEl.style.display = 'block';
+  });
+  return false;
+}
+</script>
+</body>
+</html>

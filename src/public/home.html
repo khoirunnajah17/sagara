@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sagara Meat House – Katalog Barang</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="catalog-page">
+
+<!-- Navbar -->
+<nav class="catalog-nav">
+  <div class="catalog-container catalog-nav-inner">
+    <a href="/" class="catalog-brand"><img src="/api/logo" alt="Logo" class="nav-logo-img"> Sagara Meat House</a>
+    <div class="catalog-nav-links">
+      <a href="/" class="nav-link active">Beranda</a>
+      <a href="/contact.html" class="nav-link">Hubungi Kami</a>
+    </div>
+    <div class="catalog-nav-right">
+      <!-- Guest: show login/register -->
+      <div id="navGuest">
+        <a href="/index.html" class="btn btn-outline btn-nav-login">Masuk</a>
+        <a href="/register.html" class="btn btn-primary btn-nav-login">Daftar</a>
+      </div>
+      <!-- Logged in customer -->
+      <div id="navCustomer" style="display:none;align-items:center;gap:10px">
+        <span style="font-size:13px;color:var(--text)">👤 <strong id="custNameDisplay"></strong></span>
+        <button class="btn btn-outline btn-sm" onclick="doLogout()">Keluar</button>
+      </div>
+      <!-- Logged in admin -->
+      <div id="navAdmin" style="display:none;align-items:center;gap:10px">
+        <span style="font-size:13px;color:var(--text)">👤 <strong id="adminNameDisplay"></strong></span>
+        <a href="/dashboard.html" class="btn btn-primary btn-sm">Dashboard</a>
+        <button class="btn btn-outline btn-sm" onclick="doLogout()">Keluar</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="catalog-hero">
+  <div class="catalog-container">
+    <h1>Selamat Datang di <span class="hero-highlight">Sagara Meat House</span></h1>
+    <p>Temukan berbagai produk berkualitas dengan harga terbaik</p>
+    <div class="hero-search">
+      <input type="text" id="heroSearch" placeholder="Cari produk..." class="hero-search-input">
+      <button class="btn btn-primary hero-search-btn" onclick="applySearch()">🔍 Cari</button>
+    </div>
+  </div>
+</section>
+
+<!-- Filters + Catalog -->
+<main class="catalog-container catalog-main">
+
+  <!-- Category filter bar -->
+  <div class="catalog-filter-bar">
+    <button class="cat-filter-btn active" data-cat="all">Semua</button>
+    <div id="categoryFilters"></div>
+    <div class="catalog-sort">
+      <select id="sortSelect" class="filter-select" onchange="loadProducts()">
+        <option value="name_asc">Nama A-Z</option>
+        <option value="name_desc">Nama Z-A</option>
+        <option value="price_low">Harga Terendah</option>
+        <option value="price_high">Harga Tertinggi</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Results info -->
+  <div class="catalog-results-info">
+    <span id="resultCount">0 produk ditemukan</span>
+  </div>
+
+  <!-- Product grid -->
+  <div class="catalog-grid" id="productGrid">
+    <!-- products loaded by JS -->
+  </div>
+
+  <!-- Empty state -->
+  <div class="catalog-empty" id="emptyState" style="display:none">
+    <div class="empty-icon">📦</div>
+    <h3>Produk tidak ditemukan</h3>
+    <p>Coba ubah kata kunci atau filter kategori</p>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="catalog-footer">
+  <div class="catalog-container">
+    <p style="margin-bottom:6px">&copy; 2026 Sagara Meat House. All rights reserved.</p>
+    <p style="font-size:12px"><a href="/contact.html" style="color:var(--primary);text-decoration:none">📞 Hubungi Kami</a></p>
+  </div>
+</footer>
+
+<!-- Floating Cart Button -->
+<button class="cart-fab" id="cartFab" onclick="toggleCart()">
+  🛒 <span class="cart-fab-count" id="cartCount">0</span>
+</button>
+
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header">
+    <h3>🛒 Keranjang Belanja</h3>
+    <button class="modal-close" onclick="toggleCart()">&times;</button>
+  </div>
+  <div class="cart-drawer-body" id="cartBody">
+    <div class="catalog-empty" style="padding:30px 0"><div class="empty-icon">🛒</div><p>Keranjang kosong</p></div>
+  </div>
+  <div class="cart-drawer-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span>Total:</span>
+      <span id="cartTotal" style="font-weight:800;font-size:18px;color:var(--primary)">Rp 0</span>
+    </div>
+    <div class="cart-checkout-form">
+      <!-- Login required message (shown when not logged in) -->
+      <div id="cartLoginMsg" style="background:#fff3e0;border-radius:8px;padding:12px;text-align:center;font-size:13px;display:none">
+        ⚠️ Silakan <a href="/index.html" style="color:var(--primary);font-weight:700">Login</a> atau 
+        <a href="/register.html" style="color:var(--primary);font-weight:700">Daftar</a> untuk melakukan pemesanan
+      </div>
+      <!-- Checkout form (shown when logged in) -->
+      <div id="cartCheckoutForm" style="display:none">
+        <textarea class="form-control" id="custNotes" placeholder="Catatan (opsional)" rows="2"></textarea>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px" onclick="submitOrder()">Pesan Sekarang</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script src="/js/home.js"></script>
+</body>
+</html>
