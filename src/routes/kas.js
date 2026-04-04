@@ -163,10 +163,10 @@ router.post('/fix-sales-type', auth, async (req, res) => {
     const conn = await pool.getConnection();
     try {
         await conn.beginTransaction();
-        // Find kas entries for sales (description contains "Penjualan") that are wrongly KELUAR
+        // Find kas entries for sales & hutang payments that are wrongly KELUAR
         const [wrong] = await conn.query(
             `SELECT id, reference, description, amount FROM kas 
-             WHERE type = 'KELUAR' AND (description LIKE '%Penjualan%' OR reference LIKE 'TG-%' OR reference LIKE 'INV-%')`
+             WHERE type = 'KELUAR' AND (description LIKE '%Penjualan%' OR description LIKE '%Pembayaran hutang%' OR reference LIKE 'TG-%' OR reference LIKE 'INV-%' OR reference LIKE 'HT-PAY-%')`
         );
         if (!wrong.length) {
             await conn.rollback();

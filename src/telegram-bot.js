@@ -570,10 +570,10 @@ function startBot(token) {
             const today = new Date().toISOString().slice(0, 10);
             const ref = `HT-PAY-${h.id}-${Date.now()}`;
 
-            // 2. Kas keluar (paying debt reduces cash)
+            // 2. Kas masuk (pelanggan bayar hutang = uang masuk)
             await conn.query(
                 `INSERT INTO kas (reference, date, type, counterparty, description, amount, created_by)
-                 VALUES (?, ?, 'KELUAR', ?, ?, ?, 1)`,
+                 VALUES (?, ?, 'MASUK', ?, ?, ?, 1)`,
                 [ref, today, h.counterparty, `Pembayaran hutang ${h.reference} (Telegram)`, bayar]
             );
 
@@ -583,7 +583,7 @@ function startBot(token) {
                 description: `Pembayaran hutang ${h.reference} (Telegram)`,
                 reference: ref,
                 amount: bayar,
-                type: 'KELUAR',
+                type: 'MASUK',
                 userId: 1,
                 isPurchase: false,
                 isSale: false
